@@ -1,0 +1,513 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7D9097952BB455DB00C8D45E /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097942BB455DB00C8D45E /* String+Extension.swift */; };
+		7D9097972BB4598D00C8D45E /* mock_rainfall_data.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7D9097962BB4598D00C8D45E /* mock_rainfall_data.csv */; };
+		7D9097992BB45A4900C8D45E /* RainfallNowcastMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097982BB45A4900C8D45E /* RainfallNowcastMapView.swift */; };
+		7D90979B2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90979A2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift */; };
+		7D90979D2BB6801100C8D45E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90979C2BB6801100C8D45E /* Date+Extension.swift */; };
+		7D90979F2BB6854400C8D45E /* CLLocationManager + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90979E2BB6854400C8D45E /* CLLocationManager + Extension.swift */; };
+		7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */; };
+		7DDB9ACD2BB060BB00B87E36 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACC2BB060BB00B87E36 /* ContentView.swift */; };
+		7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */; };
+		7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */; };
+		7DDB9ADA2BB0629100B87E36 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD92BB0629100B87E36 /* APIManager.swift */; };
+		7DDB9ADF2BB0649800B87E36 /* RainfallNowcastDataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ADE2BB0649800B87E36 /* RainfallNowcastDataset.swift */; };
+		7DDB9AE12BB0662100B87E36 /* RainfallNowcastMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9AE02BB0662100B87E36 /* RainfallNowcastMapViewModel.swift */; };
+		C351382AFD46B79978531D21 /* Pods_Hong_Kong_Weather_Map.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09AD7F62E06972D4457C9CE /* Pods_Hong_Kong_Weather_Map.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1BECC52E7E4634D15A636D23 /* Pods-Hong Kong Weather Map.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hong Kong Weather Map.release.xcconfig"; path = "Target Support Files/Pods-Hong Kong Weather Map/Pods-Hong Kong Weather Map.release.xcconfig"; sourceTree = "<group>"; };
+		40592911B767B1EA44237DBA /* Pods-Hong Kong Weather Map.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hong Kong Weather Map.debug.xcconfig"; path = "Target Support Files/Pods-Hong Kong Weather Map/Pods-Hong Kong Weather Map.debug.xcconfig"; sourceTree = "<group>"; };
+		7D9097942BB455DB00C8D45E /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		7D9097962BB4598D00C8D45E /* mock_rainfall_data.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mock_rainfall_data.csv; path = "Hong Kong Weather Map/mock_rainfall_data.csv"; sourceTree = "<group>"; };
+		7D9097982BB45A4900C8D45E /* RainfallNowcastMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainfallNowcastMapView.swift; sourceTree = "<group>"; };
+		7D90979A2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+extension.swift"; sourceTree = "<group>"; };
+		7D90979C2BB6801100C8D45E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		7D90979E2BB6854400C8D45E /* CLLocationManager + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocationManager + Extension.swift"; sourceTree = "<group>"; };
+		7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hong Kong Weather Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hong_Kong_Weather_MapApp.swift; sourceTree = "<group>"; };
+		7DDB9ACC2BB060BB00B87E36 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7DDB9AD02BB060BC00B87E36 /* Hong_Kong_Weather_Map.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hong_Kong_Weather_Map.entitlements; sourceTree = "<group>"; };
+		7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7DDB9AD92BB0629100B87E36 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		7DDB9ADE2BB0649800B87E36 /* RainfallNowcastDataset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainfallNowcastDataset.swift; sourceTree = "<group>"; };
+		7DDB9AE02BB0662100B87E36 /* RainfallNowcastMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainfallNowcastMapViewModel.swift; sourceTree = "<group>"; };
+		D09AD7F62E06972D4457C9CE /* Pods_Hong_Kong_Weather_Map.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hong_Kong_Weather_Map.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7DDB9AC42BB060BB00B87E36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C351382AFD46B79978531D21 /* Pods_Hong_Kong_Weather_Map.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0ADB90673F48FAB6AB99798D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				40592911B767B1EA44237DBA /* Pods-Hong Kong Weather Map.debug.xcconfig */,
+				1BECC52E7E4634D15A636D23 /* Pods-Hong Kong Weather Map.release.xcconfig */,
+			);
+			name = Pods;
+			path = ../Pods;
+			sourceTree = "<group>";
+		};
+		7D9097932BB455C800C8D45E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				7D90979E2BB6854400C8D45E /* CLLocationManager + Extension.swift */,
+				7D9097942BB455DB00C8D45E /* String+Extension.swift */,
+				7D90979A2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift */,
+				7D90979C2BB6801100C8D45E /* Date+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		7DDB9ABE2BB060BB00B87E36 = {
+			isa = PBXGroup;
+			children = (
+				7D9097962BB4598D00C8D45E /* mock_rainfall_data.csv */,
+				7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */,
+				7DDB9AC82BB060BB00B87E36 /* Products */,
+				0ADB90673F48FAB6AB99798D /* Pods */,
+				80DD3284C497EE83B219B206 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		7DDB9AC82BB060BB00B87E36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */ = {
+			isa = PBXGroup;
+			children = (
+				7D9097932BB455C800C8D45E /* Extension */,
+				7DDB9ADD2BB0644800B87E36 /* Model */,
+				7DDB9ADC2BB0637900B87E36 /* ViewModel */,
+				7DDB9ADB2BB0637000B87E36 /* View */,
+				7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */,
+				7DDB9AD92BB0629100B87E36 /* APIManager.swift */,
+				7DDB9ACC2BB060BB00B87E36 /* ContentView.swift */,
+				7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */,
+				7DDB9AD02BB060BC00B87E36 /* Hong_Kong_Weather_Map.entitlements */,
+				7DDB9AD12BB060BC00B87E36 /* Preview Content */,
+			);
+			path = "Hong Kong Weather Map";
+			sourceTree = "<group>";
+		};
+		7DDB9AD12BB060BC00B87E36 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7DDB9ADB2BB0637000B87E36 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7D9097982BB45A4900C8D45E /* RainfallNowcastMapView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7DDB9ADC2BB0637900B87E36 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				7DDB9AE02BB0662100B87E36 /* RainfallNowcastMapViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		7DDB9ADD2BB0644800B87E36 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7DDB9ADE2BB0649800B87E36 /* RainfallNowcastDataset.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		80DD3284C497EE83B219B206 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D09AD7F62E06972D4457C9CE /* Pods_Hong_Kong_Weather_Map.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7DDB9AC62BB060BB00B87E36 /* Hong Kong Weather Map */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DDB9AD62BB060BC00B87E36 /* Build configuration list for PBXNativeTarget "Hong Kong Weather Map" */;
+			buildPhases = (
+				3AD647ED881AA76828859D52 /* [CP] Check Pods Manifest.lock */,
+				7DDB9AC32BB060BB00B87E36 /* Sources */,
+				7DDB9AC42BB060BB00B87E36 /* Frameworks */,
+				7DDB9AC52BB060BB00B87E36 /* Resources */,
+				C6D580514E40ACBC9B74D2A7 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Hong Kong Weather Map";
+			productName = "Hong Kong Weather Map";
+			productReference = 7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7DDB9ABF2BB060BB00B87E36 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					7DDB9AC62BB060BB00B87E36 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+				};
+			};
+			buildConfigurationList = 7DDB9AC22BB060BB00B87E36 /* Build configuration list for PBXProject "Hong Kong Weather Map" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7DDB9ABE2BB060BB00B87E36;
+			productRefGroup = 7DDB9AC82BB060BB00B87E36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7DDB9AC62BB060BB00B87E36 /* Hong Kong Weather Map */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7DDB9AC52BB060BB00B87E36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */,
+				7D9097972BB4598D00C8D45E /* mock_rainfall_data.csv in Resources */,
+				7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3AD647ED881AA76828859D52 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Hong Kong Weather Map-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C6D580514E40ACBC9B74D2A7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hong Kong Weather Map/Pods-Hong Kong Weather Map-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Hong Kong Weather Map/Pods-Hong Kong Weather Map-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Hong Kong Weather Map/Pods-Hong Kong Weather Map-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7DDB9AC32BB060BB00B87E36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7DDB9ADA2BB0629100B87E36 /* APIManager.swift in Sources */,
+				7D9097992BB45A4900C8D45E /* RainfallNowcastMapView.swift in Sources */,
+				7DDB9AE12BB0662100B87E36 /* RainfallNowcastMapViewModel.swift in Sources */,
+				7DDB9ADF2BB0649800B87E36 /* RainfallNowcastDataset.swift in Sources */,
+				7DDB9ACD2BB060BB00B87E36 /* ContentView.swift in Sources */,
+				7D90979F2BB6854400C8D45E /* CLLocationManager + Extension.swift in Sources */,
+				7D9097952BB455DB00C8D45E /* String+Extension.swift in Sources */,
+				7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */,
+				7D90979B2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift in Sources */,
+				7D90979D2BB6801100C8D45E /* Date+Extension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7DDB9AD42BB060BC00B87E36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7DDB9AD52BB060BC00B87E36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		7DDB9AD72BB060BC00B87E36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 40592911B767B1EA44237DBA /* Pods-Hong Kong Weather Map.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Hong Kong Weather Map/Hong_Kong_Weather_Map.entitlements";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Hong Kong Weather Map/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Show position on map";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Show position on map";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Show position on map";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show position on map";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gordonthedeveloper.hkweathermap.Hong-Kong-Weather-Map";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7DDB9AD82BB060BC00B87E36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BECC52E7E4634D15A636D23 /* Pods-Hong Kong Weather Map.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Hong Kong Weather Map/Hong_Kong_Weather_Map.entitlements";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Hong Kong Weather Map/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Show position on map";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Show position on map";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Show position on map";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Show position on map";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gordonthedeveloper.hkweathermap.Hong-Kong-Weather-Map";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7DDB9AC22BB060BB00B87E36 /* Build configuration list for PBXProject "Hong Kong Weather Map" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DDB9AD42BB060BC00B87E36 /* Debug */,
+				7DDB9AD52BB060BC00B87E36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DDB9AD62BB060BC00B87E36 /* Build configuration list for PBXNativeTarget "Hong Kong Weather Map" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7DDB9AD72BB060BC00B87E36 /* Debug */,
+				7DDB9AD82BB060BC00B87E36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7DDB9ABF2BB060BB00B87E36 /* Project object */;
+}
