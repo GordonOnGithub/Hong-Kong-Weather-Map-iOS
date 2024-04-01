@@ -10,12 +10,20 @@ import Foundation
 
 extension CLLocationCoordinate2D {
 
+  var southWestCoordOfDrawingSquare: CLLocationCoordinate2D {
+    CLLocationCoordinate2D(latitude: self.latitude - 0.009, longitude: self.longitude - 0.01)
+  }
+
+  var northEastCoordOfDrawingSquare: CLLocationCoordinate2D {
+    CLLocationCoordinate2D(latitude: self.latitude + 0.009, longitude: self.longitude + 0.01)
+  }
+
   func coordinatesForDrawingSquare() -> [CLLocationCoordinate2D] {
 
     [
-      CLLocationCoordinate2D(latitude: self.latitude - 0.009, longitude: self.longitude - 0.01),
+      southWestCoordOfDrawingSquare,
       CLLocationCoordinate2D(latitude: self.latitude - 0.009, longitude: self.longitude + 0.01),
-      CLLocationCoordinate2D(latitude: self.latitude + 0.009, longitude: self.longitude + 0.01),
+      northEastCoordOfDrawingSquare,
       CLLocationCoordinate2D(latitude: self.latitude + 0.009, longitude: self.longitude - 0.01),
     ]
   }

@@ -98,9 +98,13 @@ struct RainfallNowcastDataset {
 
   private(set) var sortedDatasetDict: [Date: [RainfallNowcastData]]
 
+  let creationTimestamp: Date
+
   init?(data: Data) {
 
     self.sortedDatasetDict = [:]
+
+    self.creationTimestamp = Date()
 
     guard let csvString = String(data: data, encoding: .utf8) else {
       return nil
@@ -154,6 +158,53 @@ struct RainfallNowcastDataset {
       })
 
     }
+
+  }
+
+  func getRainfallRangeForLocation(
+    location: CLLocationCoordinate2D, southWestBoundary: CLLocationCoordinate2D,
+    northEastBoundary: CLLocationCoordinate2D
+  ) -> (Double, Double)? {
+
+    guard
+      location.latitude <= northEastBoundary.latitude
+        && location.latitude >= southWestBoundary.latitude
+        && location.longitude >= southWestBoundary.longitude
+        && location.longitude <= northEastBoundary.longitude
+    else {
+      return nil
+    }
+
+    var result: [RainfallNowcastData] = []
+
+    for dataset in self.sortedDatasetDict.values {
+
+      for data in dataset {
+
+        if location.latitude <= data.coordinate.northEastCoordOfDrawingSquare.latitude
+          && location.latitude >= data.coordinate.southWestCoordOfDrawingSquare.latitude
+          && location.longitude >= data.coordinate.southWestCoordOfDrawingSquare.longitude
+          && location.longitude <= data.coordinate.northEastCoordOfDrawingSquare.longitude
+        {
+          result.append(data)
+          break
+        }
+
+      }
+
+    }
+
+    result.sort { a, b in
+
+      return a.rainfall < b.rainfall
+
+    }
+
+    if result.isEmpty {
+      return nil
+    }
+
+    return (result.first?.rainfall ?? 0, result.last?.rainfall ?? 0)
 
   }
 

@@ -9,6 +9,25 @@ import Foundation
 
 extension String {
 
+  func leftPadded(length: Int, character: Character) -> String {
+
+    let paddingSize = length - self.count
+
+    guard paddingSize > 0 else { return self }
+
+    var result = ""
+
+    for i in 0..<paddingSize {
+
+      result.append(character)
+    }
+
+    result.append(self)
+
+    return result
+
+  }
+
   func convertTimestampStringToDate() -> Date? {
 
     guard self.count == 12 else { return nil }
