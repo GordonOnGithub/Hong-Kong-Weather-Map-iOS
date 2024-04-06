@@ -14,7 +14,7 @@ struct RainfallNowcastMapView: View {
   @Environment(\.colorScheme) var colorScheme
 
   @StateObject
-  var viewModel: RainfallNowcastMapViewModel = RainfallNowcastMapViewModel()
+  var viewModel: RainfallNowcastMapViewModel
 
   var body: some View {
     GeometryReader { reader in
@@ -93,7 +93,7 @@ struct RainfallNowcastMapView: View {
 
               Button(
                 action: {
-                  viewModel.showMapLegend = true
+                  viewModel.onMapLegendButtonClicked()
                 },
                 label: {
                   HStack {
@@ -220,89 +220,85 @@ struct RainfallNowcastMapView: View {
               Text("Loading...")
             }
           }
-        } else if viewModel.showMapLegend {
-
-          mapLegendOverlay
-
         }
 
       }
     }
   }
 
-  var mapLegendOverlay: some View {
-      
-      // TODO: check if overlay has impact on performance
-    ZStack {
-
-      Rectangle().fill(.black.opacity(0.3))
-
-      RoundedRectangle(cornerRadius: 5).fill(colorScheme == .dark ? .black : .white)
-        .frame(width: 200, height: 280)
-
-      VStack(spacing: 10) {
-
-        Text("Map Legend").underline().foregroundStyle(.primary)
-        VStack(alignment: .leading, spacing: 10) {
-          HStack(spacing: 5) {
-
-            Rectangle().fill(RainfallLevel.blue.color).frame(width: 20, height: 20)
-
-            Text("0.5mm - 2.5mm").foregroundStyle(.primary)
-
-          }
-
-          HStack(spacing: 5) {
-
-            Rectangle().fill(RainfallLevel.green.color).frame(width: 20, height: 20)
-
-            Text("2.5mm - 5mm").foregroundStyle(.primary)
-
-          }
-
-          HStack(spacing: 5) {
-
-            Rectangle().fill(RainfallLevel.yellow.color).frame(width: 20, height: 20)
-
-            Text("5mm - 10mm").foregroundStyle(.primary)
-
-          }
-
-          HStack(spacing: 5) {
-
-            Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
-
-            Text("10mm - 20mm").foregroundStyle(.primary)
-
-          }
-
-          HStack(spacing: 5) {
-
-            Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
-
-            Text("10mm - 20mm").foregroundStyle(.primary)
-
-          }
-
-          HStack(spacing: 5) {
-
-            Rectangle().fill(RainfallLevel.red.color).frame(width: 20, height: 20)
-
-            Text(" > 20mm").foregroundStyle(.primary)
-
-          }
-        }
-        Button {
-
-          viewModel.showMapLegend = false
-
-        } label: {
-          Text("Dismiss")
-            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-        }
-
-      }.padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-
-    }
-  }
+  //  var mapLegendOverlay: some View {
+  //
+  //      // TODO: check if overlay has impact on performance
+  //    ZStack {
+  //
+  //      Rectangle().fill(.black.opacity(0.3))
+  //
+  //      RoundedRectangle(cornerRadius: 5).fill(colorScheme == .dark ? .black : .white)
+  //        .frame(width: 200, height: 280)
+  //
+  //      VStack(spacing: 10) {
+  //
+  //        Text("Map Legend").underline().foregroundStyle(.primary)
+  //        VStack(alignment: .leading, spacing: 10) {
+  //          HStack(spacing: 5) {
+  //
+  //            Rectangle().fill(RainfallLevel.blue.color).frame(width: 20, height: 20)
+  //
+  //            Text("0.5mm - 2.5mm").foregroundStyle(.primary)
+  //
+  //          }
+  //
+  //          HStack(spacing: 5) {
+  //
+  //            Rectangle().fill(RainfallLevel.green.color).frame(width: 20, height: 20)
+  //
+  //            Text("2.5mm - 5mm").foregroundStyle(.primary)
+  //
+  //          }
+  //
+  //          HStack(spacing: 5) {
+  //
+  //            Rectangle().fill(RainfallLevel.yellow.color).frame(width: 20, height: 20)
+  //
+  //            Text("5mm - 10mm").foregroundStyle(.primary)
+  //
+  //          }
+  //
+  //          HStack(spacing: 5) {
+  //
+  //            Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
+  //
+  //            Text("10mm - 20mm").foregroundStyle(.primary)
+  //
+  //          }
+  //
+  //          HStack(spacing: 5) {
+  //
+  //            Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
+  //
+  //            Text("10mm - 20mm").foregroundStyle(.primary)
+  //
+  //          }
+  //
+  //          HStack(spacing: 5) {
+  //
+  //            Rectangle().fill(RainfallLevel.red.color).frame(width: 20, height: 20)
+  //
+  //            Text(" > 20mm").foregroundStyle(.primary)
+  //
+  //          }
+  //        }
+  //        Button {
+  //
+  //          viewModel.showMapLegend = false
+  //
+  //        } label: {
+  //          Text("Dismiss")
+  //            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+  //        }
+  //
+  //      }.padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
+  //
+  //    }
+  //  }
 }

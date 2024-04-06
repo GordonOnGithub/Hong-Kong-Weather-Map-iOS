@@ -13,8 +13,10 @@
 		7D90979B2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90979A2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift */; };
 		7D90979D2BB6801100C8D45E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90979C2BB6801100C8D45E /* Date+Extension.swift */; };
 		7D90979F2BB6854400C8D45E /* CLLocationManager + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D90979E2BB6854400C8D45E /* CLLocationManager + Extension.swift */; };
+		7D9097A22BBABA9700C8D45E /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A12BBABA9700C8D45E /* RootCoordinator.swift */; };
+		7D9097A42BBABA9F00C8D45E /* RootCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A32BBABA9F00C8D45E /* RootCoordinatorView.swift */; };
+		7D9097A62BBABBD400C8D45E /* MapLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A52BBABBD400C8D45E /* MapLegendView.swift */; };
 		7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */; };
-		7DDB9ACD2BB060BB00B87E36 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACC2BB060BB00B87E36 /* ContentView.swift */; };
 		7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */; };
 		7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */; };
 		7DDB9ADA2BB0629100B87E36 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD92BB0629100B87E36 /* APIManager.swift */; };
@@ -32,9 +34,11 @@
 		7D90979A2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+extension.swift"; sourceTree = "<group>"; };
 		7D90979C2BB6801100C8D45E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		7D90979E2BB6854400C8D45E /* CLLocationManager + Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocationManager + Extension.swift"; sourceTree = "<group>"; };
+		7D9097A12BBABA9700C8D45E /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
+		7D9097A32BBABA9F00C8D45E /* RootCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinatorView.swift; sourceTree = "<group>"; };
+		7D9097A52BBABBD400C8D45E /* MapLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLegendView.swift; sourceTree = "<group>"; };
 		7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hong Kong Weather Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hong_Kong_Weather_MapApp.swift; sourceTree = "<group>"; };
-		7DDB9ACC2BB060BB00B87E36 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7DDB9AD02BB060BC00B87E36 /* Hong_Kong_Weather_Map.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Hong_Kong_Weather_Map.entitlements; sourceTree = "<group>"; };
 		7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -77,6 +81,15 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		7D9097A02BBABA7A00C8D45E /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				7D9097A12BBABA9700C8D45E /* RootCoordinator.swift */,
+				7D9097A32BBABA9F00C8D45E /* RootCoordinatorView.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		7DDB9ABE2BB060BB00B87E36 = {
 			isa = PBXGroup;
 			children = (
@@ -99,13 +112,13 @@
 		7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */ = {
 			isa = PBXGroup;
 			children = (
+				7D9097A02BBABA7A00C8D45E /* Coordinator */,
 				7D9097932BB455C800C8D45E /* Extension */,
 				7DDB9ADD2BB0644800B87E36 /* Model */,
 				7DDB9ADC2BB0637900B87E36 /* ViewModel */,
 				7DDB9ADB2BB0637000B87E36 /* View */,
 				7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */,
 				7DDB9AD92BB0629100B87E36 /* APIManager.swift */,
-				7DDB9ACC2BB060BB00B87E36 /* ContentView.swift */,
 				7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */,
 				7DDB9AD02BB060BC00B87E36 /* Hong_Kong_Weather_Map.entitlements */,
 				7DDB9AD12BB060BC00B87E36 /* Preview Content */,
@@ -125,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				7D9097982BB45A4900C8D45E /* RainfallNowcastMapView.swift */,
+				7D9097A52BBABBD400C8D45E /* MapLegendView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -270,13 +284,15 @@
 			files = (
 				7DDB9ADA2BB0629100B87E36 /* APIManager.swift in Sources */,
 				7D9097992BB45A4900C8D45E /* RainfallNowcastMapView.swift in Sources */,
+				7D9097A62BBABBD400C8D45E /* MapLegendView.swift in Sources */,
 				7DDB9AE12BB0662100B87E36 /* RainfallNowcastMapViewModel.swift in Sources */,
+				7D9097A42BBABA9F00C8D45E /* RootCoordinatorView.swift in Sources */,
 				7DDB9ADF2BB0649800B87E36 /* RainfallNowcastDataset.swift in Sources */,
-				7DDB9ACD2BB060BB00B87E36 /* ContentView.swift in Sources */,
 				7D90979F2BB6854400C8D45E /* CLLocationManager + Extension.swift in Sources */,
 				7D9097952BB455DB00C8D45E /* String+Extension.swift in Sources */,
 				7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */,
 				7D90979B2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift in Sources */,
+				7D9097A22BBABA9700C8D45E /* RootCoordinator.swift in Sources */,
 				7D90979D2BB6801100C8D45E /* Date+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

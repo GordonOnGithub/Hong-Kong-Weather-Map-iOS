@@ -72,6 +72,12 @@ enum RainfallNowcastSummary {
   }
 }
 
+protocol RainfallNowcastMapViewModelDelegate: AnyObject {
+
+  func rainfallNowcastMapViewModelDidRequestShowMapLegend(_ viewModel: RainfallNowcastMapViewModel)
+
+}
+
 class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   let apiManager: APIManagerType
@@ -122,10 +128,9 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   @Published
   var currentLocationRainfallRangeMessage: RainfallNowcastSummary = .none
 
-  @Published
-  var showMapLegend: Bool = false
-
   var cancellables: Set<AnyCancellable> = Set()
+
+  weak var delegate: RainfallNowcastMapViewModelDelegate?
 
   init(
     apiManager: APIManagerType = APIManagerMock.shared,
@@ -290,6 +295,9 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
     }
 
+  }
+  func onMapLegendButtonClicked() {
+    delegate?.rainfallNowcastMapViewModelDidRequestShowMapLegend(self)
   }
 
 }

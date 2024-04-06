@@ -11,7 +11,7 @@ import SwiftUI
 struct Hong_Kong_Weather_MapApp: App {
   var body: some Scene {
     WindowGroup {
-      RainfallNowcastMapView()
+      RootCoordinatorView()
     }
   }
 }
