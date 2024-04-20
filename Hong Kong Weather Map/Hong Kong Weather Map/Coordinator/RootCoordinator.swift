@@ -7,37 +7,26 @@
 
 import Foundation
 
-enum RootCoordinatorSheetRoute: Identifiable {
-
-  case mapLegend
-
-  var id: String {
-    switch self {
-    case .mapLegend:
-      return "mapLegend"
-    }
-
-  }
-
+enum Tab: String, Hashable {
+  case map
+  case summary
 }
 
 class RootCoordinator: ObservableObject {
+
   @Published
-  var sheetRoute: RootCoordinatorSheetRoute?
+  var selectedTab: Tab = .map
 
   func makeRainfallNowcastMapViewModel() -> RainfallNowcastMapViewModel {
 
     let vm = RainfallNowcastMapViewModel()
-    vm.delegate = self
+    //    vm.delegate = self
 
     return vm
   }
-}
-
-extension RootCoordinator: RainfallNowcastMapViewModelDelegate {
-  func rainfallNowcastMapViewModelDidRequestShowMapLegend(_ viewModel: RainfallNowcastMapViewModel)
-  {
-    sheetRoute = .mapLegend
-  }
 
 }
+
+//extension RootCoordinator: RainfallNowcastMapViewModelDelegate {
+
+//}

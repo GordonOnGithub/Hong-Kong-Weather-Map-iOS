@@ -20,15 +20,15 @@ enum RainfallLevel {
 
     switch self {
     case .blue:
-      Color.blue.opacity(0.6)
+      Color.blue
     case .green:
-      Color.green.opacity(0.6)
+      Color.green
     case .yellow:
-      Color.yellow.opacity(0.6)
+      Color.yellow
     case .orange:
-      Color.orange.opacity(0.6)
+      Color.orange
     case .red:
-      Color.red.opacity(0.6)
+      Color.red
     }
 
   }

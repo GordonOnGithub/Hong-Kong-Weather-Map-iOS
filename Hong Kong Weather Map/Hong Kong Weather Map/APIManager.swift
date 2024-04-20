@@ -19,6 +19,8 @@ enum API {
 
   case rainfallNowcast
 
+  case weatherWarning
+
   var url: URL {
 
     var urlString: String? = nil
@@ -26,7 +28,9 @@ enum API {
     switch self {
     case .rainfallNowcast:
       urlString = "https://data.weather.gov.hk/weatherAPI/hko_data/F3/Gridded_rainfall_nowcast.csv"
-
+    case .weatherWarning:
+      urlString =
+        "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en"
     }
 
     return URL(string: urlString!)!
@@ -37,7 +41,7 @@ enum API {
 
     let dict: [String: String] =
       switch self {
-      case .rainfallNowcast:
+      case .rainfallNowcast, .weatherWarning:
         [:]
 
       }
@@ -51,7 +55,7 @@ enum API {
   var parameter: [String: String] {
 
     switch self {
-    case .rainfallNowcast:
+    case .rainfallNowcast, .weatherWarning:
       return [:]
 
     }
@@ -71,10 +75,21 @@ class APIManagerMock: APIManagerType {
       switch api {
       case .rainfallNowcast:
         "mock_rainfall_data"
+      case .weatherWarning:
+        "mock_warning_data"
       }
 
-    if let csvFileURL = Bundle.main.url(forResource: fileName, withExtension: ".csv"),
-      let data = try? Data(contentsOf: csvFileURL)
+    let fileExtension =
+      switch api {
+      case .rainfallNowcast:
+        ".csv"
+      case .weatherWarning:
+        ".json"
+
+      }
+
+    if let fileURL = Bundle.main.url(forResource: fileName, withExtension: fileExtension),
+      let data = try? Data(contentsOf: fileURL)
     {
       return Just(data).setFailureType(to: Error.self).eraseToAnyPublisher()
 
@@ -135,7 +150,7 @@ class APIManager: APIManagerType {
   func getMethod(forAPI api: API) -> String {
 
     switch api {
-    case .rainfallNowcast:
+    case .rainfallNowcast, .weatherWarning:
       return "GET"
     }
   }

@@ -16,6 +16,8 @@
 		7D9097A22BBABA9700C8D45E /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A12BBABA9700C8D45E /* RootCoordinator.swift */; };
 		7D9097A42BBABA9F00C8D45E /* RootCoordinatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A32BBABA9F00C8D45E /* RootCoordinatorView.swift */; };
 		7D9097A62BBABBD400C8D45E /* MapLegendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A52BBABBD400C8D45E /* MapLegendView.swift */; };
+		7D9097A82BC1883100C8D45E /* mock_warning_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 7D9097A72BC1883100C8D45E /* mock_warning_data.json */; };
+		7D9097AA2BC189CA00C8D45E /* WeatherWarningDataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A92BC189CA00C8D45E /* WeatherWarningDataset.swift */; };
 		7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */; };
 		7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */; };
 		7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */; };
@@ -37,6 +39,8 @@
 		7D9097A12BBABA9700C8D45E /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
 		7D9097A32BBABA9F00C8D45E /* RootCoordinatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinatorView.swift; sourceTree = "<group>"; };
 		7D9097A52BBABBD400C8D45E /* MapLegendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLegendView.swift; sourceTree = "<group>"; };
+		7D9097A72BC1883100C8D45E /* mock_warning_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mock_warning_data.json; path = "Hong Kong Weather Map/mock_warning_data.json"; sourceTree = "<group>"; };
+		7D9097A92BC189CA00C8D45E /* WeatherWarningDataset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningDataset.swift; sourceTree = "<group>"; };
 		7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hong Kong Weather Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hong_Kong_Weather_MapApp.swift; sourceTree = "<group>"; };
 		7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -93,6 +97,7 @@
 		7DDB9ABE2BB060BB00B87E36 = {
 			isa = PBXGroup;
 			children = (
+				7D9097A72BC1883100C8D45E /* mock_warning_data.json */,
 				7D9097962BB4598D00C8D45E /* mock_rainfall_data.csv */,
 				7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */,
 				7DDB9AC82BB060BB00B87E36 /* Products */,
@@ -155,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				7DDB9ADE2BB0649800B87E36 /* RainfallNowcastDataset.swift */,
+				7D9097A92BC189CA00C8D45E /* WeatherWarningDataset.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -229,6 +235,7 @@
 			files = (
 				7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */,
 				7D9097972BB4598D00C8D45E /* mock_rainfall_data.csv in Resources */,
+				7D9097A82BC1883100C8D45E /* mock_warning_data.json in Resources */,
 				7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,6 +301,7 @@
 				7D90979B2BB4626100C8D45E /* CLLocationCoordinate2D+extension.swift in Sources */,
 				7D9097A22BBABA9700C8D45E /* RootCoordinator.swift in Sources */,
 				7D90979D2BB6801100C8D45E /* Date+Extension.swift in Sources */,
+				7D9097AA2BC189CA00C8D45E /* WeatherWarningDataset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,6 +450,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -486,6 +495,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";

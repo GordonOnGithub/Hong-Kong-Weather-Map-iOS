@@ -11,37 +11,45 @@ import Foundation
 import SwiftUI
 import _MapKit_SwiftUI
 
-enum RainfallNowcastSummary {
+enum ErrorMessage {
+
   case none
-  case error
-  case noLocationAccess
-  case noInfo
-  case currentLocationNowcast(min: Double, max: Double)
+  case networkError  // network unavailable
+  case dataError  // failed to fetch data
 
   var message: String {
 
     switch self {
     case .none:
+      ""
+    case .networkError:
+      "Failed to connect to the internet"
+    case .dataError:
+      "Failed to fetch weather data"
+    }
+
+  }
+}
+
+enum RainfallNowcastSummary {
+  case none
+  case noLocationAccess
+  case noInfo
+  case currentLocationNowcast(min: Double, max: Double)
+
+  var rainfallNowcastMessage: String {
+
+    switch self {
+    case .none:
       return ""
-    case .error:
-      return "Failed to obtain rainfall nowcast data. Please check network connection."
     case .noLocationAccess:
       return "Location permission is required for current location rainfall nowcast."
     case .noInfo:
       return "Rainfall nowcast is not available for current location."
     case .currentLocationNowcast(let min, let max):
-      return "Rainfall nowcast of current location in the next 2 hours: \(min)mm - \(max)mm."
+      return "Rainfall of your location in next 2 hours:\n\(min)mm - \(max)mm"
     }
 
-  }
-
-  var color: Color {
-    switch self {
-    case .error:
-      return .yellow
-    default:
-      return .clear
-    }
   }
 
   var icon: Image {
@@ -49,8 +57,6 @@ enum RainfallNowcastSummary {
     switch self {
     case .none:
       return Image(systemName: "ellipsis")
-    case .error:
-      return Image(systemName: "exclamationmark.circle")
     case .noLocationAccess:
       return Image(systemName: "location.slash.circle")
     case .noInfo:
@@ -72,11 +78,9 @@ enum RainfallNowcastSummary {
   }
 }
 
-protocol RainfallNowcastMapViewModelDelegate: AnyObject {
+//protocol RainfallNowcastMapViewModelDelegate: AnyObject {
 
-  func rainfallNowcastMapViewModelDidRequestShowMapLegend(_ viewModel: RainfallNowcastMapViewModel)
-
-}
+//}
 
 class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
@@ -84,10 +88,10 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   var locationManager: CLLocationManagerType
 
-  let mapCenter = CLLocationCoordinate2D(latitude: 22.3067953, longitude: 114.162375)  // Victoria Harbour
+  let mapCenter = CLLocationCoordinate2D(latitude: 22.345, longitude: 114.12)  // Victoria Harbour
 
   let HKSouthWestCoord = CLLocation(latitude: 22.15, longitude: 113.8)
-  let HKNorthEastCoord = CLLocation(latitude: 22.58, longitude: 114.45)
+  let HKNorthEastCoord = CLLocation(latitude: 22.58, longitude: 114.43)
 
   var mapBound: MapCameraBounds {
     .init(
@@ -97,12 +101,15 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
             CLLocationCoordinate2D(
               latitude: HKNorthEastCoord.coordinate.latitude,
               longitude: HKSouthWestCoord.coordinate.longitude)),
-          size: .init(width: 400000, height: 400000))), minimumDistance: 5000,
-      maximumDistance: 160000)
+          size: .init(width: 320000, height: 320000))), minimumDistance: 10000,
+      maximumDistance: 150000)
   }
 
   @Published
   var rainfallNowcastDataset: RainfallNowcastDataset? = nil
+
+  @Published
+  var weatherWarningDataset: WeatherWarningDataset? = nil
 
   @Published
   var datasetTimestampList: [Date] = []
@@ -117,7 +124,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   var hasLocationPermission: Bool = false
 
   @Published
-  var isFetching: Bool = false
+  var isFetchingRainfallNowcast: Bool = false
 
   @Published
   var currentLocation: CLLocation? = nil
@@ -126,14 +133,19 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   var currentLocationRainfallRange: (Double, Double)?
 
   @Published
+  var errorMessage: ErrorMessage = .networkError
+
+  @Published
   var currentLocationRainfallRangeMessage: RainfallNowcastSummary = .none
 
   var cancellables: Set<AnyCancellable> = Set()
 
-  weak var delegate: RainfallNowcastMapViewModelDelegate?
+  var autoRefreshTimer: Timer?
+
+  //  weak var delegate: RainfallNowcastMapViewModelDelegate?
 
   init(
-    apiManager: APIManagerType = APIManagerMock.shared,
+    apiManager: APIManagerType = APIManager.shared,
     locationManager: CLLocationManagerType = CLLocationManager()
   ) {
 
@@ -148,8 +160,13 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
     self.locationManager.requestWhenInUseAuthorization()
 
-    fetchRainfallNowcastData()
+    autoRefreshTimer = Timer.scheduledTimer(withTimeInterval: 600, repeats: true) { [weak self] _ in
 
+      guard let self else { return }
+
+      self.refresh()
+
+    }
   }
 
   func setupPublisher() {
@@ -161,10 +178,10 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
       guard let self else { return .none }
 
-      if !isFetching,
+      if !isFetchingRainfallNowcast,
         rainfallNowcastDataset == nil
       {
-        return .error
+        return .none
       }
 
       if !hasLocationPermission {
@@ -179,7 +196,8 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
       return .currentLocationNowcast(
         min: currentLocationRainfallRange.0, max: currentLocationRainfallRange.1)
 
-    }.assign(to: &$currentLocationRainfallRangeMessage)
+    }.debounce(for: 0.3, scheduler: DispatchQueue.main).assign(
+      to: &$currentLocationRainfallRangeMessage)
 
     $rainfallNowcastDataset.combineLatest($currentLocation) {
       [weak self]
@@ -192,21 +210,34 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
         northEastBoundary: HKNorthEastCoord.coordinate)
     }.assign(to: &$currentLocationRainfallRange)
 
+    apiManager.isReachable.sink { [weak self] reachable in
+      guard let self else { return }
+
+      if reachable {
+        self.refresh()
+      }
+
+      self.errorMessage = reachable ? .none : .networkError
+
+    }.store(in: &cancellables)
+
   }
 
   func fetchRainfallNowcastData() {
-    isFetching = true
+    isFetchingRainfallNowcast = true
 
     autoplayTimer?.invalidate()
     autoplayTimer = nil
 
-    apiManager.call(api: .rainfallNowcast).sink { [weak self] result in
+    apiManager.call(api: .rainfallNowcast).receive(on: DispatchQueue.main).sink {
+      [weak self] result in
 
-      self?.isFetching = false
+      self?.isFetchingRainfallNowcast = false
 
       switch result {
       case .failure(_):
         self?.rainfallNowcastDataset = nil
+        self?.errorMessage = .dataError
       default:
         break
 
@@ -232,6 +263,37 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
     }.store(in: &cancellables)
 
+  }
+
+  func fetchWeatherWarningDataset() {
+    apiManager.call(api: .weatherWarning).receive(on: DispatchQueue.main).sink {
+      [weak self] result in
+
+      switch result {
+
+      case .failure:
+        self?.errorMessage = .dataError
+        self?.weatherWarningDataset = nil
+      default:
+        break
+      }
+
+    } receiveValue: { [weak self] data in
+
+      guard let self, let data else {
+        self?.weatherWarningDataset = nil
+        return
+      }
+
+      self.weatherWarningDataset = WeatherWarningDataset(data: data)
+
+    }.store(in: &cancellables)
+  }
+
+  func refresh() {
+    errorMessage = .none
+    fetchRainfallNowcastData()
+    fetchWeatherWarningDataset()
   }
 
   func isWithinHKBoundary(coord: CLLocationCoordinate2D) -> Bool {
@@ -275,7 +337,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     } else {
 
       self.autoplayTimer = Timer.scheduledTimer(
-        withTimeInterval: 1.5, repeats: true,
+        withTimeInterval: 1, repeats: true,
         block: { [weak self] _ in
 
           guard let self, let selectedTimestamp else { return }
@@ -296,9 +358,27 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     }
 
   }
-  func onMapLegendButtonClicked() {
-    delegate?.rainfallNowcastMapViewModelDidRequestShowMapLegend(self)
-  }
+
+  //    func onWeatherWarningRowClicked(){
+  //        delegate?.rainfallNowcastMapViewModelDidRequestShowSummary(self)
+  //    }
+
+  //  func getWeatherWarningDescription(data: WeatherWarningDataset?) -> String? {
+  //
+  //    guard let firstWarning = data?.activeWarnings.first else {
+  //      return nil
+  //    }
+  //
+  //    var warning = (firstWarning.warningCodeDescription ?? " ") + firstWarning.description
+  //
+  //    if let warningCount = data?.activeWarnings.count, warningCount > 1 {
+  //
+  //      warning += " (and \(warningCount - 1) more)"
+  //
+  //    }
+  //
+  //    return warning
+  //  }
 
 }
 

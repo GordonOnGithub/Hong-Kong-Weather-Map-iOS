@@ -14,16 +14,24 @@ struct RootCoordinatorView: View {
   var coordinator: RootCoordinator = RootCoordinator()
 
   var body: some View {
-    NavigationStack {
-      RainfallNowcastMapView(viewModel: coordinator.makeRainfallNowcastMapViewModel())
-    }.sheet(item: $coordinator.sheetRoute) { route in
 
-      switch route {
-      case .mapLegend:
-        MapLegendView()
+    RainfallNowcastMapView(viewModel: coordinator.makeRainfallNowcastMapViewModel())
 
-      }
-
-    }
+    //    NavigationStack {
+    //
+    //      TabView(selection: $coordinator.selectedTab) {
+    //        RainfallNowcastMapView(viewModel: coordinator.makeRainfallNowcastMapViewModel())
+    //          .tabItem({
+    //            Label("Map", systemImage: "map")
+    //          }).tag(Tab.map)
+    //
+    //        WeatherSummaryView(viewModel: coordinator.makeWeatherSummaryViewModel())
+    //          .tabItem({
+    //            Label("Summary", systemImage: "info.circle")
+    //          }).tag(Tab.summary)
+    //
+    //      }
+    //
+    //    }
   }
 }

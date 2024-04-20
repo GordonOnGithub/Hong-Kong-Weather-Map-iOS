@@ -17,288 +17,343 @@ struct RainfallNowcastMapView: View {
   var viewModel: RainfallNowcastMapViewModel
 
   var body: some View {
-    GeometryReader { reader in
 
-      VStack {
+    VStack {
+
+      if viewModel.errorMessage != .none {
+
         HStack {
           Spacer()
 
-          viewModel.currentLocationRainfallRangeMessage.icon
+          Image(systemName: "exclamationmark.circle").foregroundStyle(.black)
 
-          Text(viewModel.currentLocationRainfallRangeMessage.message).multilineTextAlignment(
-            .leading)
+          Text(viewModel.errorMessage.message).foregroundStyle(.black)
+            .font(.headline)
+            .bold()
+            .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
           Spacer()
-        }.background(viewModel.currentLocationRainfallRangeMessage.color)
-          .padding(
-            EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-          )
-        Map(
-          position: .constant(
-            .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 180000))),
-          bounds: viewModel.mapBound, interactionModes: [.pan, .zoom]
-        ) {
+        }.background(.yellow)
+      }
 
-          if let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
-            let selectedTimestamp = viewModel.selectedTimestamp,
-            let datasetOfSelectedTimestamp = rainfallNowcastDataset.sortedDatasetDict[
-              selectedTimestamp]?.filter({ data in
-                data.rainfallLevel != nil && viewModel.isWithinHKBoundary(coord: data.coordinate)
-              })
-          {
+      if let weatherWarningDataset = viewModel.weatherWarningDataset,
+        !weatherWarningDataset.activeWarnings.isEmpty
+      {
 
-            ForEach(datasetOfSelectedTimestamp) { data in
-              MapPolygon(coordinates: data.coordinate.coordinatesForDrawingSquare())
-                .foregroundStyle(data.rainfallLevel!.color)
-            }
+        Group {
 
-            if viewModel.autoplayTimer == nil {
-              MapPolygon(coordinates: [
-                viewModel.HKNorthEastCoord.coordinate,
-
-                CLLocationCoordinate2D(
-                  latitude: viewModel.HKSouthWestCoord.coordinate.latitude,
-                  longitude: viewModel.HKNorthEastCoord.coordinate.longitude),
-
-                viewModel.HKSouthWestCoord.coordinate,
-
-                CLLocationCoordinate2D(
-                  latitude: viewModel.HKNorthEastCoord.coordinate.latitude,
-                  longitude: viewModel.HKSouthWestCoord.coordinate.longitude),
-
-              ]).stroke(.black, lineWidth: 1)
-                .foregroundStyle(.clear)
-            }
-          }
-
-          UserAnnotation()
-
-        }.mapControls {
-          if viewModel.hasLocationPermission {
-            MapUserLocationButton()
-          }
-        }
-        .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
-        .frame(height: reader.size.width)
-
-        if !viewModel.isFetching {
-
-          HStack {
-
-            if viewModel.rainfallNowcastDataset != nil {
+          VStack {
+            HStack {
+              Image(systemName: "exclamationmark.triangle").foregroundStyle(.black)
 
               Text(
-                "Last update: \(viewModel.rainfallNowcastDataset?.creationTimestamp.description ?? "")"
+                weatherWarningDataset.activeWarnings.count > 1
+                  ? "\(weatherWarningDataset.activeWarnings.count) Weather Warnings"
+                  : "Weather Warning"
               )
-              .font(.system(size: 12))
+              .bold()
+              Spacer()
+            }.frame(height: 30)
+            Divider()
+            TabView {
 
-              Button(
-                action: {
-                  viewModel.onMapLegendButtonClicked()
-                },
-                label: {
+              ForEach(weatherWarningDataset.activeWarnings) { warning in
+                VStack {
                   HStack {
-                    Image(systemName: "info.circle")
-                    Text("Legend")
-                  }.padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
-                    .overlay(
-                      RoundedRectangle(cornerRadius: 5)
-                        .stroke(Color.blue, lineWidth: 1)
-                    )
+                    Text((warning.warningCodeDescription ?? " ") + warning.description)
+                      .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+                    Spacer()
+                  }
+                  Spacer()
                 }
-              ).buttonStyle(.plain)
-                .foregroundStyle(.blue)
+              }
 
             }
-
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .automatic))
+            .frame(height: 70)
           }
+          .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+        }
+        .background(
+          RoundedRectangle(cornerRadius: 10)
+            .fill(.yellow)
+        )
+        .frame(height: 100)
+        .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
 
-          HStack {
+      }
+      GeometryReader { reader in
 
-            Button(
-              action: {
-                viewModel.fetchRainfallNowcastData()
-              },
-              label: {
+        ScrollView {
+          VStack {
+
+            if !viewModel.isFetchingRainfallNowcast {
+
+              Group {
                 HStack {
-                  Image(systemName: "arrow.clockwise.circle")
 
-                  Text("Refresh")
-                    .font(.system(size: 20))
+                  viewModel.currentLocationRainfallRangeMessage.icon
 
-                }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                  Text(viewModel.currentLocationRainfallRangeMessage.rainfallNowcastMessage)
+                    .multilineTextAlignment(
+                      .leading)
+
+                  Spacer()
+                }.padding(
+                  EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10)
+                )
               }
-            ).foregroundStyle(.white)
-              .background(.green)
-              .clipShape(RoundedRectangle(cornerRadius: 5))
-              .disabled(viewModel.isFetching)
+              .background(.lightBlue)
+            }
+            Map(
+              position: .constant(
+                .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 130000))),
+              bounds: viewModel.mapBound, interactionModes: [.pan, .zoom]
+            ) {
 
-            if !viewModel.datasetTimestampList.isEmpty,
-              let selectedTimestamp = viewModel.selectedTimestamp
-            {
-              Menu {
+              if let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
+                let selectedTimestamp = viewModel.selectedTimestamp,
+                let datasetOfSelectedTimestamp = rainfallNowcastDataset.sortedDatasetDict[
+                  selectedTimestamp]?.filter({ data in
+                    data.rainfallLevel != nil
+                      && viewModel.isWithinHKBoundary(coord: data.coordinate)
+                  })
+              {
 
-                ForEach(viewModel.datasetTimestampList) { date in
-
-                  Button(
-                    action: {
-                      viewModel.selectedTimestamp = date
-
-                    },
-                    label: {
-
-                      if date == viewModel.selectedTimestamp {
-                        HStack {
-
-                          Image(systemName: "checkmark.circle")
-                          Text(viewModel.getTimeOfTheDay(date))
-                            .bold()
-                          Spacer()
-                        }
-                      } else {
-                        Text(viewModel.getTimeOfTheDay(date))
-
-                      }
-
-                    })
-
+                ForEach(datasetOfSelectedTimestamp) { data in
+                  MapPolygon(coordinates: data.coordinate.coordinatesForDrawingSquare())
+                    .foregroundStyle(data.rainfallLevel!.color.opacity(0.6))
                 }
 
-              } label: {
-                HStack {
-                  Image(systemName: "clock")
+                if viewModel.autoplayTimer == nil {
+                  MapPolygon(coordinates: [
+                    viewModel.HKNorthEastCoord.coordinate,
 
-                  Text(viewModel.getTimeOfTheDay(selectedTimestamp))
-                    .font(.system(size: 20))
-                    .multilineTextAlignment(.leading)
-                    .frame(width: 60)
+                    CLLocationCoordinate2D(
+                      latitude: viewModel.HKSouthWestCoord.coordinate.latitude,
+                      longitude: viewModel.HKNorthEastCoord.coordinate.longitude),
 
-                }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    viewModel.HKSouthWestCoord.coordinate,
+
+                    CLLocationCoordinate2D(
+                      latitude: viewModel.HKNorthEastCoord.coordinate.latitude,
+                      longitude: viewModel.HKSouthWestCoord.coordinate.longitude),
+
+                  ]).stroke(.black, lineWidth: 1)
+                    .foregroundStyle(.clear)
+                }
               }
-              .foregroundStyle(.white)
-              .background(viewModel.autoplayTimer == nil ? .blue : .gray)
-              .clipShape(RoundedRectangle(cornerRadius: 5))
-              .disabled(viewModel.autoplayTimer != nil)
+
+              UserAnnotation()
+
+            }.mapControls {
+              if viewModel.hasLocationPermission {
+                MapUserLocationButton()
+              }
+            }
+            .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
+            .frame(height: reader.size.width)
+          }
+
+          if !viewModel.isFetchingRainfallNowcast {
+
+            HStack {
 
               Button(
                 action: {
-
-                  viewModel.onPlayButtonClicked()
-
+                  viewModel.refresh()
                 },
                 label: {
                   HStack {
+                    Image(systemName: "arrow.clockwise.circle")
 
-                    if viewModel.autoplayTimer == nil {
-                      Image(systemName: "play.circle")
+                    Text("Refresh")
+                      .font(.system(size: 20))
 
-                      Text("Play")
-                        .font(.system(size: 20))
-
-                    } else {
-
-                      Image(systemName: "stop.circle")
-
-                      Text("Stop")
-                        .font(.system(size: 20))
-                    }
                   }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                 }
               ).foregroundStyle(.white)
-                .background(viewModel.autoplayTimer == nil ? .green : .red)
+                .background(.green)
                 .clipShape(RoundedRectangle(cornerRadius: 5))
-                .disabled(viewModel.isFetching)
-            }
-          }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-        }
+                .disabled(viewModel.isFetchingRainfallNowcast)
 
-        Spacer()
-      }.overlay {
-        if viewModel.isFetching {
-          ZStack {
-            Rectangle().fill(.black.opacity(0.3))
-            ProgressView {
-              Text("Loading...")
+              if !viewModel.datasetTimestampList.isEmpty,
+                let selectedTimestamp = viewModel.selectedTimestamp
+              {
+                Menu {
+
+                  ForEach(viewModel.datasetTimestampList) { date in
+
+                    Button(
+                      action: {
+                        viewModel.selectedTimestamp = date
+
+                      },
+                      label: {
+
+                        if date == viewModel.selectedTimestamp {
+                          HStack {
+
+                            Image(systemName: "checkmark.circle")
+                            Text(viewModel.getTimeOfTheDay(date))
+                              .bold()
+                            Spacer()
+                          }
+                        } else {
+                          Text(viewModel.getTimeOfTheDay(date))
+
+                        }
+
+                      })
+
+                  }
+
+                } label: {
+                  HStack {
+                    Image(systemName: "clock")
+
+                    Text(viewModel.getTimeOfTheDay(selectedTimestamp))
+                      .font(.system(size: 20))
+                      .multilineTextAlignment(.leading)
+                      .frame(width: 60)
+
+                  }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                }
+                .foregroundStyle(.white)
+                .background(viewModel.autoplayTimer == nil ? .blue : .gray)
+                .clipShape(RoundedRectangle(cornerRadius: 5))
+                .disabled(viewModel.autoplayTimer != nil)
+
+                Button(
+                  action: {
+
+                    viewModel.onPlayButtonClicked()
+
+                  },
+                  label: {
+                    HStack {
+
+                      if viewModel.autoplayTimer == nil {
+                        Image(systemName: "play.circle")
+
+                        Text("Play")
+                          .font(.system(size: 20))
+
+                      } else {
+
+                        Image(systemName: "stop.circle")
+
+                        Text("Stop")
+                          .font(.system(size: 20))
+                      }
+                    }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                  }
+                ).foregroundStyle(.white)
+                  .background(viewModel.autoplayTimer == nil ? .green : .red)
+                  .clipShape(RoundedRectangle(cornerRadius: 5))
+                  .disabled(viewModel.isFetchingRainfallNowcast)
+              }
+            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+
+            HStack {
+
+              if viewModel.rainfallNowcastDataset != nil {
+
+                Text(
+                  "Last update: \(viewModel.rainfallNowcastDataset?.creationTimestamp.ISO8601Format(.iso8601(timeZone: TimeZone.current)) ?? "")"
+                )
+                .font(.system(size: 12))
+              }
             }
+
+            Group {
+              VStack {
+
+                HStack {
+                  Text("Map Legend:").font(.headline)
+                  Spacer()
+
+                }
+
+                HStack(spacing: 5) {
+
+                  Rectangle().fill(RainfallLevel.blue.color).frame(width: 20, height: 20)
+
+                  Text("0.5 - 2.5 mm").foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 100)
+
+                  Spacer()
+                  Rectangle().fill(RainfallLevel.green.color).frame(width: 20, height: 20)
+
+                  Text("2.5 - 5 mm").foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 100)
+
+                  Spacer()
+
+                }
+
+                HStack(spacing: 5) {
+
+                  Rectangle().fill(RainfallLevel.yellow.color).frame(width: 20, height: 20)
+
+                  Text("5 - 10 mm").foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 100)
+                  Spacer()
+                  Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
+
+                  Text("10 - 20 mm").foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 100)
+
+                  Spacer()
+
+                }
+
+                HStack(spacing: 5) {
+                  Rectangle().fill(RainfallLevel.red.color).frame(width: 20, height: 20)
+
+                  Text(" > 20 mm").foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 100)
+
+                  Spacer()
+
+                }
+              }.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+            }
+            .background(content: {
+              RoundedRectangle(cornerRadius: 5)
+                .fill(.lightYellow)
+                .stroke(.primary, lineWidth: 1)
+            })
+
+            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+          }
+
+          Spacer()
+        }
+      }
+      Spacer()
+    }
+    .background(.white)
+    .overlay {
+      if viewModel.isFetchingRainfallNowcast {
+        ZStack {
+          Rectangle().fill(.black.opacity(0.3))
+          ProgressView {
+            Text("Loading...")
           }
         }
-
       }
+    }
+    .onAppear {
+      UIPageControl.appearance().currentPageIndicatorTintColor = .black
+      UIPageControl.appearance().pageIndicatorTintColor = .gray
+
     }
   }
 
-  //  var mapLegendOverlay: some View {
-  //
-  //      // TODO: check if overlay has impact on performance
-  //    ZStack {
-  //
-  //      Rectangle().fill(.black.opacity(0.3))
-  //
-  //      RoundedRectangle(cornerRadius: 5).fill(colorScheme == .dark ? .black : .white)
-  //        .frame(width: 200, height: 280)
-  //
-  //      VStack(spacing: 10) {
-  //
-  //        Text("Map Legend").underline().foregroundStyle(.primary)
-  //        VStack(alignment: .leading, spacing: 10) {
-  //          HStack(spacing: 5) {
-  //
-  //            Rectangle().fill(RainfallLevel.blue.color).frame(width: 20, height: 20)
-  //
-  //            Text("0.5mm - 2.5mm").foregroundStyle(.primary)
-  //
-  //          }
-  //
-  //          HStack(spacing: 5) {
-  //
-  //            Rectangle().fill(RainfallLevel.green.color).frame(width: 20, height: 20)
-  //
-  //            Text("2.5mm - 5mm").foregroundStyle(.primary)
-  //
-  //          }
-  //
-  //          HStack(spacing: 5) {
-  //
-  //            Rectangle().fill(RainfallLevel.yellow.color).frame(width: 20, height: 20)
-  //
-  //            Text("5mm - 10mm").foregroundStyle(.primary)
-  //
-  //          }
-  //
-  //          HStack(spacing: 5) {
-  //
-  //            Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
-  //
-  //            Text("10mm - 20mm").foregroundStyle(.primary)
-  //
-  //          }
-  //
-  //          HStack(spacing: 5) {
-  //
-  //            Rectangle().fill(RainfallLevel.orange.color).frame(width: 20, height: 20)
-  //
-  //            Text("10mm - 20mm").foregroundStyle(.primary)
-  //
-  //          }
-  //
-  //          HStack(spacing: 5) {
-  //
-  //            Rectangle().fill(RainfallLevel.red.color).frame(width: 20, height: 20)
-  //
-  //            Text(" > 20mm").foregroundStyle(.primary)
-  //
-  //          }
-  //        }
-  //        Button {
-  //
-  //          viewModel.showMapLegend = false
-  //
-  //        } label: {
-  //          Text("Dismiss")
-  //            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
-  //        }
-  //
-  //      }.padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-  //
-  //    }
-  //  }
 }
