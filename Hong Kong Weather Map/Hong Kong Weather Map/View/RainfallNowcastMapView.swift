@@ -50,28 +50,12 @@ struct RainfallNowcastMapView: View {
         ScrollView {
           VStack {
 
-            if !viewModel.isFetchingRainfallNowcast {
-
-              Group {
-                HStack {
-
-                  viewModel.currentLocationRainfallRangeMessage.icon
-
-                  Text(viewModel.currentLocationRainfallRangeMessage.rainfallNowcastMessage)
-                    .multilineTextAlignment(
-                      .leading)
-
-                  Spacer()
-                }.padding(
-                  EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-                )
-              }
-              .background(.lightBlue)
-            }
             Map(
               position: .constant(
                 .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 130000))),
-              bounds: viewModel.mapBound, interactionModes: [.pan, .zoom]
+              bounds: viewModel.mapBound, interactionModes: [.pan, .zoom],
+              selection: $viewModel.selectedWeatherStation
+
             ) {
 
               if let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
@@ -83,9 +67,28 @@ struct RainfallNowcastMapView: View {
                   })
               {
 
-                ForEach(datasetOfSelectedTimestamp) { data in
-                  MapPolygon(coordinates: data.coordinate.coordinatesForDrawingSquare())
-                    .foregroundStyle(data.rainfallLevel!.color.opacity(0.6))
+                if viewModel.showRegionalTemperature {
+                  if let regionalTemperatureDataset = viewModel.regionalTemperatureDataset {
+
+                    ForEach(regionalTemperatureDataset.dataDict.sorted(by: >), id: \.key) {
+                      location, temperature in
+
+                      if let coord = RegionalTemperatureDataset.getWeatherStationPosition(
+                        locationName: location)
+                      {
+
+                        Marker(coordinate: coord) {
+                          Text("\(location)\n\(temperature)°C")
+                        }.tag(location as String?)
+
+                      }
+                    }
+                  }
+                } else {
+                  ForEach(datasetOfSelectedTimestamp) { data in
+                    MapPolygon(coordinates: data.coordinate.coordinatesForDrawingSquare())
+                      .foregroundStyle(data.rainfallLevel!.color.opacity(0.6))
+                  }
                 }
 
                 if viewModel.autoplayTimer == nil {
@@ -120,6 +123,33 @@ struct RainfallNowcastMapView: View {
 
           if !viewModel.isFetchingRainfallNowcast {
 
+            Group {
+              HStack {
+                if viewModel.selectedWeatherStation == nil {
+                  viewModel.currentLocationRainfallRangeMessage.icon
+
+                  Text(viewModel.currentLocationRainfallRangeMessage.rainfallNowcastMessage)
+                    .multilineTextAlignment(
+                      .leading)
+                } else {
+
+                  Image(
+                    systemName: viewModel.getTemperatureIconName(
+                      location: viewModel.selectedWeatherStation ?? ""))
+
+                  Text(
+                    viewModel.getWeatherStationTemperatureDescription(
+                      location: viewModel.selectedWeatherStation ?? ""))
+
+                }
+
+                Spacer()
+              }.padding(
+                EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+              )
+            }
+            .background(.lightBlue)
+
             HStack {
 
               Button(
@@ -139,84 +169,117 @@ struct RainfallNowcastMapView: View {
                 .background(.green)
                 .clipShape(RoundedRectangle(cornerRadius: 5))
                 .disabled(viewModel.isFetchingRainfallNowcast)
-
-              if !viewModel.datasetTimestampList.isEmpty,
-                let selectedTimestamp = viewModel.selectedTimestamp
-              {
-                Menu {
-
-                  ForEach(viewModel.datasetTimestampList) { date in
-
-                    Button(
-                      action: {
-                        viewModel.selectedTimestamp = date
-
-                      },
-                      label: {
-
-                        if date == viewModel.selectedTimestamp {
-                          HStack {
-
-                            Image(systemName: "checkmark.circle")
-                            Text(viewModel.getTimeOfTheDay(date))
-                              .bold()
-                            Spacer()
-                          }
-                        } else {
-                          Text(viewModel.getTimeOfTheDay(date))
-
-                        }
-
-                      })
-
-                  }
-
-                } label: {
+              Button(
+                action: {
+                  viewModel.showRegionalTemperature.toggle()
+                  viewModel.selectedWeatherStation = nil
+                },
+                label: {
                   HStack {
-                    Image(systemName: "clock")
+                    Image(
+                      systemName: viewModel.showRegionalTemperature
+                        ? "cloud.rain" : "thermometer.medium")
 
-                    Text(viewModel.getTimeOfTheDay(selectedTimestamp))
-                      .font(.system(size: 20))
-                      .multilineTextAlignment(.leading)
-                      .frame(width: 60)
+                    Text(
+                      viewModel.showRegionalTemperature
+                        ? "Show Rainfall Nowcast" : "Show Regional Temperature"
+                    )
+                    .font(.system(size: 12))
 
-                  }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                  }.padding(EdgeInsets(top: 11, leading: 10, bottom: 11, trailing: 10))
                 }
-                .foregroundStyle(.white)
-                .background(viewModel.autoplayTimer == nil ? .blue : .gray)
+              ).foregroundStyle(.white)
+                .background(
+                  viewModel.autoplayTimer != nil
+                    ? .gray : (viewModel.showRegionalTemperature ? .blue : .yellow)
+                )
                 .clipShape(RoundedRectangle(cornerRadius: 5))
-                .disabled(viewModel.autoplayTimer != nil)
+                .disabled(viewModel.isFetchingRainfallNowcast || viewModel.autoplayTimer != nil)
+            }
 
-                Button(
-                  action: {
+            if !viewModel.showRegionalTemperature {
+              HStack {
 
-                    viewModel.onPlayButtonClicked()
+                if !viewModel.datasetTimestampList.isEmpty,
+                  let selectedTimestamp = viewModel.selectedTimestamp
+                {
+                  Text("Show rainfall nowcast at: ")
 
-                  },
-                  label: {
+                  Menu {
+
+                    ForEach(viewModel.datasetTimestampList) { date in
+
+                      Button(
+                        action: {
+                          viewModel.selectedTimestamp = date
+
+                        },
+                        label: {
+
+                          if date == viewModel.selectedTimestamp {
+                            HStack {
+
+                              Image(systemName: "checkmark.circle")
+                              Text(viewModel.getTimeOfTheDay(date))
+                                .bold()
+                              Spacer()
+                            }
+                          } else {
+                            Text(viewModel.getTimeOfTheDay(date))
+
+                          }
+
+                        })
+
+                    }
+
+                  } label: {
                     HStack {
+                      Image(systemName: "clock")
 
-                      if viewModel.autoplayTimer == nil {
-                        Image(systemName: "play.circle")
+                      Text(viewModel.getTimeOfTheDay(selectedTimestamp))
+                        .font(.system(size: 20))
+                        .multilineTextAlignment(.leading)
+                        .frame(width: 60)
 
-                        Text("Play")
-                          .font(.system(size: 20))
-
-                      } else {
-
-                        Image(systemName: "stop.circle")
-
-                        Text("Stop")
-                          .font(.system(size: 20))
-                      }
                     }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
                   }
-                ).foregroundStyle(.white)
-                  .background(viewModel.autoplayTimer == nil ? .green : .red)
+                  .foregroundStyle(.white)
+                  .background(viewModel.autoplayTimer == nil ? .blue : .gray)
                   .clipShape(RoundedRectangle(cornerRadius: 5))
-                  .disabled(viewModel.isFetchingRainfallNowcast)
-              }
-            }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                  .disabled(viewModel.autoplayTimer != nil)
+
+                  Button(
+                    action: {
+
+                      viewModel.onPlayButtonClicked()
+
+                    },
+                    label: {
+                      HStack {
+
+                        if viewModel.autoplayTimer == nil {
+                          Image(systemName: "play.circle")
+
+                          Text("Play")
+                            .font(.system(size: 20))
+
+                        } else {
+
+                          Image(systemName: "stop.circle")
+
+                          Text("Stop")
+                            .font(.system(size: 20))
+                        }
+                      }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+                    }
+                  ).foregroundStyle(.white)
+                    .background(viewModel.autoplayTimer == nil ? .green : .red)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .disabled(viewModel.isFetchingRainfallNowcast)
+                }
+              }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+            }
 
             HStack {
 
@@ -284,6 +347,14 @@ struct RainfallNowcastMapView: View {
 
                   Spacer()
 
+                  Image(systemName: "mappin.circle.fill")
+                    .foregroundColor(.red)
+                    .frame(width: 20, height: 20)
+                  Text("Weather Station").foregroundStyle(.primary)
+                    .frame(width: 100)
+
+                  Spacer()
+
                 }
               }.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
             }
@@ -292,8 +363,9 @@ struct RainfallNowcastMapView: View {
                 .fill(.lightYellow)
                 .stroke(.primary, lineWidth: 1)
             })
-
             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+
+            Text(viewModel.versionString).font(.system(size: 10))
           }
 
           Spacer()

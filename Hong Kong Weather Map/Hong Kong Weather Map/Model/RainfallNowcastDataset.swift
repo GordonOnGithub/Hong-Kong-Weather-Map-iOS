@@ -113,7 +113,6 @@ struct RainfallNowcastDataset {
     var rows =
       csvString
       .split(separator: "\n")
-
       .map { substring in
         let row = substring.split(separator: ",").map { string in
           String(string)

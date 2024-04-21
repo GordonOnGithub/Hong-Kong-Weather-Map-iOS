@@ -20,6 +20,8 @@
 		7D9097AA2BC189CA00C8D45E /* WeatherWarningDataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097A92BC189CA00C8D45E /* WeatherWarningDataset.swift */; };
 		7D9097B42BD3E87E00C8D45E /* WeatherWarningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097B32BD3E87E00C8D45E /* WeatherWarningView.swift */; };
 		7D9097B62BD3E8B000C8D45E /* WeatherWarningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097B52BD3E8B000C8D45E /* WeatherWarningViewModel.swift */; };
+		7D9097B82BD4B8B000C8D45E /* mock_temperature_data.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7D9097B72BD4B8B000C8D45E /* mock_temperature_data.csv */; };
+		7D9097BA2BD4B92800C8D45E /* RegionalTemperatureDataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097B92BD4B92800C8D45E /* RegionalTemperatureDataset.swift */; };
 		7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */; };
 		7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */; };
 		7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */; };
@@ -45,6 +47,8 @@
 		7D9097A92BC189CA00C8D45E /* WeatherWarningDataset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningDataset.swift; sourceTree = "<group>"; };
 		7D9097B32BD3E87E00C8D45E /* WeatherWarningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningView.swift; sourceTree = "<group>"; };
 		7D9097B52BD3E8B000C8D45E /* WeatherWarningViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningViewModel.swift; sourceTree = "<group>"; };
+		7D9097B72BD4B8B000C8D45E /* mock_temperature_data.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mock_temperature_data.csv; path = "Hong Kong Weather Map/mock_temperature_data.csv"; sourceTree = "<group>"; };
+		7D9097B92BD4B92800C8D45E /* RegionalTemperatureDataset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalTemperatureDataset.swift; sourceTree = "<group>"; };
 		7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hong Kong Weather Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hong_Kong_Weather_MapApp.swift; sourceTree = "<group>"; };
 		7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 		7DDB9ABE2BB060BB00B87E36 = {
 			isa = PBXGroup;
 			children = (
+				7D9097B72BD4B8B000C8D45E /* mock_temperature_data.csv */,
 				7D9097A72BC1883100C8D45E /* mock_warning_data.json */,
 				7D9097962BB4598D00C8D45E /* mock_rainfall_data.csv */,
 				7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */,
@@ -167,6 +172,7 @@
 			children = (
 				7DDB9ADE2BB0649800B87E36 /* RainfallNowcastDataset.swift */,
 				7D9097A92BC189CA00C8D45E /* WeatherWarningDataset.swift */,
+				7D9097B92BD4B92800C8D45E /* RegionalTemperatureDataset.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -242,6 +248,7 @@
 				7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */,
 				7D9097972BB4598D00C8D45E /* mock_rainfall_data.csv in Resources */,
 				7D9097A82BC1883100C8D45E /* mock_warning_data.json in Resources */,
+				7D9097B82BD4B8B000C8D45E /* mock_temperature_data.csv in Resources */,
 				7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D9097BA2BD4B92800C8D45E /* RegionalTemperatureDataset.swift in Sources */,
 				7DDB9ADA2BB0629100B87E36 /* APIManager.swift in Sources */,
 				7D9097992BB45A4900C8D45E /* RainfallNowcastMapView.swift in Sources */,
 				7D9097B62BD3E8B000C8D45E /* WeatherWarningViewModel.swift in Sources */,

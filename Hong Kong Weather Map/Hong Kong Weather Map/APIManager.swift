@@ -21,6 +21,8 @@ enum API {
 
   case weatherWarning
 
+  case regionalTemperature
+
   var url: URL {
 
     var urlString: String? = nil
@@ -31,6 +33,9 @@ enum API {
     case .weatherWarning:
       urlString =
         "https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en"
+    case .regionalTemperature:
+      urlString =
+        "https://data.weather.gov.hk/weatherAPI/hko_data/regional-weather/latest_1min_temperature.csv"
     }
 
     return URL(string: urlString!)!
@@ -41,7 +46,7 @@ enum API {
 
     let dict: [String: String] =
       switch self {
-      case .rainfallNowcast, .weatherWarning:
+      case .rainfallNowcast, .weatherWarning, .regionalTemperature:
         [:]
 
       }
@@ -55,7 +60,7 @@ enum API {
   var parameter: [String: String] {
 
     switch self {
-    case .rainfallNowcast, .weatherWarning:
+    case .rainfallNowcast, .weatherWarning, .regionalTemperature:
       return [:]
 
     }
@@ -77,11 +82,13 @@ class APIManagerMock: APIManagerType {
         "mock_rainfall_data"
       case .weatherWarning:
         "mock_warning_data"
+      case .regionalTemperature:
+        "mock_temperature_data"
       }
 
     let fileExtension =
       switch api {
-      case .rainfallNowcast:
+      case .rainfallNowcast, .regionalTemperature:
         ".csv"
       case .weatherWarning:
         ".json"
@@ -150,7 +157,7 @@ class APIManager: APIManagerType {
   func getMethod(forAPI api: API) -> String {
 
     switch api {
-    case .rainfallNowcast, .weatherWarning:
+    case .rainfallNowcast, .weatherWarning, .regionalTemperature:
       return "GET"
     }
   }

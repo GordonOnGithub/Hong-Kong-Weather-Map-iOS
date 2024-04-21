@@ -95,7 +95,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   let mapCenter = CLLocationCoordinate2D(latitude: 22.345, longitude: 114.12)  // Victoria Harbour
 
-  let HKSouthWestCoord = CLLocation(latitude: 22.15, longitude: 113.82)
+  let HKSouthWestCoord = CLLocation(latitude: 22.15, longitude: 113.84)
   let HKNorthEastCoord = CLLocation(latitude: 22.565, longitude: 114.41)
 
   var mapBound: MapCameraBounds {
@@ -117,7 +117,16 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   var weatherWarningDataset: WeatherWarningDataset? = nil
 
   @Published
+  var regionalTemperatureDataset: RegionalTemperatureDataset? = nil
+
+  @Published
+  var selectedWeatherStation: String?
+
+  @Published
   var datasetTimestampList: [Date] = []
+
+  @Published
+  var showRegionalTemperature: Bool = false
 
   @Published
   var selectedTimestamp: Date? = nil
@@ -147,6 +156,12 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   var lastRefreshTimestamp: Date?
 
+  lazy var versionString: String = {
+
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+
+    return "v" + (appVersion ?? "")
+  }()
   //  weak var delegate: RainfallNowcastMapViewModelDelegate?
 
   init(
@@ -288,10 +303,64 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     }.store(in: &cancellables)
   }
 
+  func fetchRegionalTemperatureDataset() {
+
+    apiManager.call(api: .regionalTemperature).receive(on: DispatchQueue.main).sink {
+      [weak self] result in
+
+      switch result {
+
+      case .failure:
+        self?.errorMessage = .dataError
+        self?.regionalTemperatureDataset = nil
+      default:
+        break
+      }
+
+    } receiveValue: { [weak self] data in
+
+      guard let self, let data else {
+        self?.regionalTemperatureDataset = nil
+        return
+      }
+
+      self.regionalTemperatureDataset = RegionalTemperatureDataset(data: data)
+
+    }.store(in: &cancellables)
+
+  }
+
+  func getTemperatureIconName(location: String) -> String {
+
+    guard let temperatureString = regionalTemperatureDataset?.dataDict[location],
+      let temperature = Double(temperatureString)
+    else {
+      return "thermometer.medium"
+    }
+
+    if temperature <= 15 {
+      return "thermometer.low"
+    } else if temperature >= 30 {
+      return "thermometer.high"
+    } else {
+      return "thermometer.medium"
+    }
+
+  }
+
+  func getWeatherStationTemperatureDescription(location: String) -> String {
+
+    let temperature = regionalTemperatureDataset?.dataDict[location] ?? " - "
+
+    return "Current temperature of \(location):\n\(temperature)°C"
+
+  }
+
   func refresh() {
     errorMessage = .none
     fetchRainfallNowcastData()
     fetchWeatherWarningDataset()
+    fetchRegionalTemperatureDataset()
     lastRefreshTimestamp = Date()
   }
 
