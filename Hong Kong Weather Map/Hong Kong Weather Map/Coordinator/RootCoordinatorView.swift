@@ -17,21 +17,5 @@ struct RootCoordinatorView: View {
 
     RainfallNowcastMapView(viewModel: coordinator.makeRainfallNowcastMapViewModel())
 
-    //    NavigationStack {
-    //
-    //      TabView(selection: $coordinator.selectedTab) {
-    //        RainfallNowcastMapView(viewModel: coordinator.makeRainfallNowcastMapViewModel())
-    //          .tabItem({
-    //            Label("Map", systemImage: "map")
-    //          }).tag(Tab.map)
-    //
-    //        WeatherSummaryView(viewModel: coordinator.makeWeatherSummaryViewModel())
-    //          .tabItem({
-    //            Label("Summary", systemImage: "info.circle")
-    //          }).tag(Tab.summary)
-    //
-    //      }
-    //
-    //    }
   }
 }

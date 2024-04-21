@@ -39,46 +39,9 @@ struct RainfallNowcastMapView: View {
         !weatherWarningDataset.activeWarnings.isEmpty
       {
 
-        Group {
-
-          VStack {
-            HStack {
-              Image(systemName: "exclamationmark.triangle").foregroundStyle(.black)
-
-              Text(
-                weatherWarningDataset.activeWarnings.count > 1
-                  ? "\(weatherWarningDataset.activeWarnings.count) Weather Warnings"
-                  : "Weather Warning"
-              )
-              .bold()
-              Spacer()
-            }.frame(height: 30)
-            Divider()
-            TabView {
-
-              ForEach(weatherWarningDataset.activeWarnings) { warning in
-                VStack {
-                  HStack {
-                    Text((warning.warningCodeDescription ?? " ") + warning.description)
-                      .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
-                    Spacer()
-                  }
-                  Spacer()
-                }
-              }
-
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .automatic))
-            .frame(height: 70)
-          }
-          .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
-        }
-        .background(
-          RoundedRectangle(cornerRadius: 10)
-            .fill(.yellow)
+        WeatherWarningView(
+          viewModel: WeatherWarningViewModel(weatherWarningDataset: weatherWarningDataset)
         )
-        .frame(height: 100)
         .padding(EdgeInsets(top: 20, leading: 10, bottom: 20, trailing: 10))
 
       }
@@ -100,7 +63,7 @@ struct RainfallNowcastMapView: View {
 
                   Spacer()
                 }.padding(
-                  EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10)
+                  EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
                 )
               }
               .background(.lightBlue)
@@ -352,6 +315,21 @@ struct RainfallNowcastMapView: View {
     .onAppear {
       UIPageControl.appearance().currentPageIndicatorTintColor = .black
       UIPageControl.appearance().pageIndicatorTintColor = .gray
+
+    }
+    .onReceive(
+      NotificationCenter.default.publisher(
+        for: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+    ) { _ in
+
+      viewModel.handleMemoryWarning()
+
+    }
+    .onReceive(
+      NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
+    ) { _ in
+
+      viewModel.onEnterForeground()
 
     }
   }

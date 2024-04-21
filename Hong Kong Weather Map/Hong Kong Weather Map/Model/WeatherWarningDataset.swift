@@ -102,7 +102,7 @@ struct WeatherWarningDataset {
         actionCode: actionCode)
 
     }).sorted(by: { a, b in
-      a.priority < b.priority
+      a.priority > b.priority
     })
 
   }
