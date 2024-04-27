@@ -49,10 +49,25 @@ enum RainfallNowcastSummary {
     case .currentLocationNowcast(let min, let max):
 
       if max > 0 {
-        return "Rainfall of your location in next 2 hours:\n\(min)mm - \(max)mm"
+        return "Your location's rainfall in next 2 hours: "
       } else {
         return "No rainfall is expected at your location in next 2 hours"
       }
+    }
+
+  }
+
+  var rainfallRange: String? {
+
+    switch self {
+    case .currentLocationNowcast(let min, let max):
+      if max > 0 {
+        return "\(min)mm - \(max)mm"
+      } else {
+        return nil
+      }
+    default:
+      return nil
     }
 
   }
@@ -133,6 +148,9 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   @Published
   var autoplayTimer: Timer? = nil
+
+  @Published
+  var isInBackground: Bool = false
 
   @Published
   var hasLocationPermission: Bool = false
@@ -349,10 +367,15 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   }
 
   func getWeatherStationTemperatureDescription(location: String) -> String {
+    return "\(location)'s current temperature: "
+
+  }
+
+  func getWeatherStationTemperatureRange(location: String) -> String {
 
     let temperature = regionalTemperatureDataset?.dataDict[location] ?? " - "
 
-    return "Current temperature of \(location):\n\(temperature)°C"
+    return "\(temperature)°C"
 
   }
 
@@ -364,9 +387,18 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     lastRefreshTimestamp = Date()
   }
 
+  func onEnterBackground() {
+
+    isInBackground = true
+
+  }
+
   func onEnterForeground() {
+
+    isInBackground = false
+
     if let timestamp = lastRefreshTimestamp,
-      Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970 > 10
+      Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970 > 15
     {
       rainfallNowcastDataset = nil
       weatherWarningDataset = nil
@@ -412,10 +444,12 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     if let autoplayTimer {
       autoplayTimer.invalidate()
       self.autoplayTimer = nil
-    } else {
+    } else if datasetTimestampList.count > 0 {
+
+      selectedTimestamp = datasetTimestampList[0]
 
       self.autoplayTimer = Timer.scheduledTimer(
-        withTimeInterval: 1.2, repeats: true,
+        withTimeInterval: 1.4, repeats: true,
         block: { [weak self] _ in
 
           guard let self, let selectedTimestamp else { return }
@@ -425,7 +459,10 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
             if selectedTimestamp == self.datasetTimestampList[i] {
 
               if i >= self.datasetTimestampList.count - 1 {
-                self.selectedTimestamp = self.datasetTimestampList[0]
+
+                self.autoplayTimer?.invalidate()
+                self.autoplayTimer = nil
+
               } else {
                 self.selectedTimestamp = self.datasetTimestampList[i + 1]
               }
@@ -442,6 +479,41 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     rainfallNowcastDataset = nil
 
     fetchRainfallNowcastData()
+  }
+
+  func onMapModeToggleClicked() {
+    showRegionalTemperature.toggle()
+
+    if showRegionalTemperature {
+
+      guard let locations = regionalTemperatureDataset?.dataDict.keys, let currentLocation else {
+        return
+      }
+
+      let sortedLocation = locations.sorted(by: { a, b in
+
+        guard let aCoord = RegionalTemperatureDataset.getWeatherStationPosition(locationName: a)
+        else {
+          return false
+        }
+
+        guard let bCoord = RegionalTemperatureDataset.getWeatherStationPosition(locationName: b)
+        else {
+          return true
+        }
+
+        return currentLocation.distance(
+          from: CLLocation(latitude: aCoord.latitude, longitude: aCoord.longitude))
+          < currentLocation.distance(
+            from: CLLocation(latitude: bCoord.latitude, longitude: bCoord.longitude))
+
+      })
+
+      selectedWeatherStation = sortedLocation.first
+
+    } else {
+      selectedWeatherStation = nil
+    }
   }
 
 }

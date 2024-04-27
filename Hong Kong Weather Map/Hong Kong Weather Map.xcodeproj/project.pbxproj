@@ -49,6 +49,7 @@
 		7D9097B52BD3E8B000C8D45E /* WeatherWarningViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherWarningViewModel.swift; sourceTree = "<group>"; };
 		7D9097B72BD4B8B000C8D45E /* mock_temperature_data.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = mock_temperature_data.csv; path = "Hong Kong Weather Map/mock_temperature_data.csv"; sourceTree = "<group>"; };
 		7D9097B92BD4B92800C8D45E /* RegionalTemperatureDataset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalTemperatureDataset.swift; sourceTree = "<group>"; };
+		7D9097BB2BDCAB0900C8D45E /* Hong-Kong-Weather-Map-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Hong-Kong-Weather-Map-Info.plist"; sourceTree = SOURCE_ROOT; };
 		7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hong Kong Weather Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hong_Kong_Weather_MapApp.swift; sourceTree = "<group>"; };
 		7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 		7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */ = {
 			isa = PBXGroup;
 			children = (
+				7D9097BB2BDCAB0900C8D45E /* Hong-Kong-Weather-Map-Info.plist */,
 				7D9097A02BBABA7A00C8D45E /* Coordinator */,
 				7D9097932BB455C800C8D45E /* Extension */,
 				7DDB9ADD2BB0644800B87E36 /* Model */,
@@ -446,14 +448,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Hong Kong Weather Map/Hong_Kong_Weather_Map.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Hong Kong Weather Map/Preview Content\"";
-				DEVELOPMENT_TEAM = 9Q4R7U9T9F;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GCC_OPTIMIZATION_LEVEL = fast;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Hong-Kong-Weather-Map-Info.plist";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Show position on map";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Show position on map";
 				INFOPLIST_KEY_NSLocationUsageDescription = "Show position on map";
@@ -473,8 +476,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gordonthedeveloper.hkweathermap.Hong-Kong-Weather-Map";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gordonthedeveloper.hkweathermap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
@@ -493,13 +496,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Hong Kong Weather Map/Hong_Kong_Weather_Map.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Hong Kong Weather Map/Preview Content\"";
-				DEVELOPMENT_TEAM = 9Q4R7U9T9F;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Hong-Kong-Weather-Map-Info.plist";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Show position on map";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Show position on map";
 				INFOPLIST_KEY_NSLocationUsageDescription = "Show position on map";
@@ -519,8 +523,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.gordonthedeveloper.hkweathermap.Hong-Kong-Weather-Map";
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gordonthedeveloper.hkweathermap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;

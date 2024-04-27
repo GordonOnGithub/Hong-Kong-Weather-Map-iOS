@@ -46,6 +46,8 @@ struct WeatherWarningView: View {
         .tabViewStyle(.page(indexDisplayMode: .automatic))
         .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .automatic))
         .frame(height: 65)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: -20, trailing: 0))
+
       }
       .padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
     }
