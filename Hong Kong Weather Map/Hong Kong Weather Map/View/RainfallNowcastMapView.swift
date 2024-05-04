@@ -149,7 +149,7 @@ struct RainfallNowcastMapView: View {
           }
 
           Spacer()
-        }
+        }.scrollIndicators(.visible)
       }
       Spacer()
     }
@@ -230,8 +230,8 @@ struct RainfallNowcastMapView: View {
           },
           label: {
             Image(systemName: "arrow.clockwise")
-              .frame(height: 25)
-              .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+              .frame(width: 30, height: 30)
+              .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
 
           }
         ).foregroundStyle(.white)
@@ -248,8 +248,8 @@ struct RainfallNowcastMapView: View {
               systemName: viewModel.showRegionalTemperature
                 ? "cloud.rain" : "thermometer.medium"
             )
-            .frame(height: 25)
-            .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+            .frame(width: 30, height: 30)
+            .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
           }
         ).foregroundStyle(.white)
           .background(

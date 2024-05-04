@@ -111,7 +111,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   let mapCenter = CLLocationCoordinate2D(latitude: 22.345, longitude: 114.12)  // Victoria Harbour
 
   let HKSouthWestCoord = CLLocation(latitude: 22.15, longitude: 113.84)
-  let HKNorthEastCoord = CLLocation(latitude: 22.565, longitude: 114.41)
+  let HKNorthEastCoord = CLLocation(latitude: 22.564, longitude: 114.405)
 
   var mapBound: MapCameraBounds {
     .init(
