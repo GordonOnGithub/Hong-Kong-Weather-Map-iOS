@@ -153,6 +153,7 @@ struct RainfallNowcastMapView: View {
       }
       Spacer()
     }
+    .ignoresSafeArea(edges: .bottom)
     .background(.white)
     .overlay {
       if viewModel.isFetchingRainfallNowcast {
