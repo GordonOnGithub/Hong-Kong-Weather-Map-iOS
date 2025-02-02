@@ -120,7 +120,9 @@ struct RainfallNowcastMapView: View {
                 MapUserLocationButton()
               }
             }
-            .mapStyle(.standard(elevation: .flat, pointsOfInterest: .excludingAll))
+            .mapStyle(
+              .standard(elevation: .flat, pointsOfInterest: .excludingAll, showsTraffic: true)
+            )
             .frame(height: reader.size.width)
           }
 
@@ -272,52 +274,15 @@ struct RainfallNowcastMapView: View {
       if !viewModel.datasetTimestampList.isEmpty,
         let selectedTimestamp = viewModel.selectedTimestamp
       {
-        Text("Show rainfall nowcast at: ")
-
-        Menu {
-
-          ForEach(viewModel.datasetTimestampList) { date in
-
-            Button(
-              action: {
-                viewModel.selectedTimestamp = date
-
-              },
-              label: {
-
-                if date == viewModel.selectedTimestamp {
-                  HStack {
-
-                    Image(systemName: "checkmark.circle")
-                    Text(viewModel.getTimeOfTheDay(date))
-                      .bold()
-                    Spacer()
-                  }
-                } else {
-                  Text(viewModel.getTimeOfTheDay(date))
-
-                }
-
-              })
-
-          }
-
-        } label: {
-          HStack {
-            Image(systemName: "clock")
-
-            Text(viewModel.getTimeOfTheDay(selectedTimestamp))
-              .font(.system(size: 20))
-              .multilineTextAlignment(.leading)
-              .frame(width: 60)
-
-          }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
+        if let date = viewModel.selectedTimestamp {
+          Text(viewModel.getTimeOfTheDay(date)).font(.headline)
         }
-        .foregroundStyle(.white)
-        .background(viewModel.autoplayTimer == nil ? .blue : .gray)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
-        .disabled(viewModel.autoplayTimer != nil)
-        .shadow(radius: 3, x: 0, y: 3)
+
+        Slider(
+          value: $viewModel.timestampSliderIndex,
+          in: 0.0...CGFloat(viewModel.datasetTimestampList.count - 1), step: 1.0
+        )
+        .disabled(viewModel.autoplayTimer != nil).padding(5)
 
         Button(
           action: {

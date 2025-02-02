@@ -147,6 +147,9 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   var selectedTimestamp: Date? = nil
 
   @Published
+  var timestampSliderIndex: CGFloat = 0
+
+  @Published
   var autoplayTimer: Timer? = nil
 
   @Published
@@ -251,6 +254,14 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
       self.errorMessage = reachable ? .none : .networkError
 
     }.store(in: &cancellables)
+
+    $timestampSliderIndex.map { [weak self] index -> Date? in
+
+      guard let self, Int(index) < datasetTimestampList.count else { return nil }
+
+      return datasetTimestampList[Int(index)]
+
+    }.assign(to: &$selectedTimestamp)
 
   }
 
@@ -448,6 +459,8 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
       selectedTimestamp = datasetTimestampList[0]
 
+      timestampSliderIndex = 0.0
+
       self.autoplayTimer = Timer.scheduledTimer(
         withTimeInterval: 1.4, repeats: true,
         block: { [weak self] _ in
@@ -465,6 +478,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
               } else {
                 self.selectedTimestamp = self.datasetTimestampList[i + 1]
+                self.timestampSliderIndex = CGFloat(i + 1)
               }
             }
           }
