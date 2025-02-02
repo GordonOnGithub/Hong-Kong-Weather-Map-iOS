@@ -9,6 +9,6 @@ import CoreLocation
 
 extension CLLocation {
 
-  static let HKSouthWestCoord = CLLocation(latitude: 22.02, longitude: 113.66)
-  static let HKNorthEastCoord = CLLocation(latitude: 22.73, longitude: 114.46)
+  static let HKSouthWestCoord = CLLocation(latitude: 22.13, longitude: 113.43)
+  static let HKNorthEastCoord = CLLocation(latitude: 22.64, longitude: 114.46)
 }
