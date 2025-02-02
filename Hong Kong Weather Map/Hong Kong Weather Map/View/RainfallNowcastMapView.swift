@@ -56,57 +56,54 @@ struct RainfallNowcastMapView: View {
 
             Map(
               position: .constant(
-                .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 130000))),
+                .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 180000))),
               bounds: viewModel.mapBound, interactionModes: [.pan, .zoom],
               selection: $viewModel.selectedWeatherStation
 
             ) {
 
-              if let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
-                let selectedTimestamp = viewModel.selectedTimestamp,
-                let datasetOfSelectedTimestamp = rainfallNowcastDataset.sortedDatasetDict[
-                  selectedTimestamp]?.filter({ data in
-                    data.rainfallLevel != nil
-                      && viewModel.isWithinHKBoundary(coord: data.coordinate)
-                  })
-              {
+              if viewModel.showRegionalTemperature {
+                if let regionalTemperatureDataset = viewModel.regionalTemperatureDataset {
 
-                if viewModel.showRegionalTemperature {
-                  if let regionalTemperatureDataset = viewModel.regionalTemperatureDataset {
+                  ForEach(regionalTemperatureDataset.dataDict.sorted(by: >), id: \.key) {
+                    location, temperature in
 
-                    ForEach(regionalTemperatureDataset.dataDict.sorted(by: >), id: \.key) {
-                      location, temperature in
+                    if let coord = RegionalTemperatureDataset.getWeatherStationPosition(
+                      locationName: location)
+                    {
 
-                      if let coord = RegionalTemperatureDataset.getWeatherStationPosition(
-                        locationName: location)
-                      {
+                      Marker(coordinate: coord) {
+                        Text("\(location)\n\(temperature)°C")
+                      }.tag(location as String?)
 
-                        Marker(coordinate: coord) {
-                          Text("\(location)\n\(temperature)°C")
-                        }.tag(location as String?)
-
-                      }
                     }
                   }
-                } else if !viewModel.isInBackground {  // workaround to avoid app unresponivesness when returning from background
-                  ForEach(datasetOfSelectedTimestamp) { data in
-                    MapPolygon(coordinates: data.coordinate.coordinatesForDrawingSquare())
-                      .foregroundStyle(data.rainfallLevel!.color.opacity(0.6))
+                }
+              } else {
+
+                if let selectedTimestamp = viewModel.selectedTimestamp,
+                  let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
+                  let mergedGridOfSelectedTimestamp = rainfallNowcastDataset.sortedMergedGridDict[
+                    selectedTimestamp]
+                {
+                  ForEach(mergedGridOfSelectedTimestamp) { data in
+                    MapPolygon(coordinates: data.coordinates)
+                      .foregroundStyle(data.rainfallLevel.color.opacity(0.5))
                   }
                 }
 
                 MapPolygon(coordinates: [
-                  viewModel.HKNorthEastCoord.coordinate,
+                  CLLocation.HKNorthEastCoord.coordinate,
 
                   CLLocationCoordinate2D(
-                    latitude: viewModel.HKSouthWestCoord.coordinate.latitude,
-                    longitude: viewModel.HKNorthEastCoord.coordinate.longitude),
+                    latitude: CLLocation.HKSouthWestCoord.coordinate.latitude,
+                    longitude: CLLocation.HKNorthEastCoord.coordinate.longitude),
 
-                  viewModel.HKSouthWestCoord.coordinate,
+                  CLLocation.HKSouthWestCoord.coordinate,
 
                   CLLocationCoordinate2D(
-                    latitude: viewModel.HKNorthEastCoord.coordinate.latitude,
-                    longitude: viewModel.HKSouthWestCoord.coordinate.longitude),
+                    latitude: CLLocation.HKNorthEastCoord.coordinate.latitude,
+                    longitude: CLLocation.HKSouthWestCoord.coordinate.longitude),
 
                 ]).stroke(.black, lineWidth: 1)
                   .foregroundStyle(.clear)

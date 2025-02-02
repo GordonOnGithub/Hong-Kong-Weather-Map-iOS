@@ -94,13 +94,49 @@ struct RainfallNowcastData: Identifiable {
   }
 }
 
+struct RainfallNowcastMergedGrid: Identifiable {
+
+  let rainfallLevel: RainfallLevel
+
+  let coordinates: [CLLocationCoordinate2D]
+
+  let id: String
+
+  init?(data: [RainfallNowcastData]) {
+
+    guard !data.isEmpty, data.first!.rainfallLevel != nil else {
+      return nil
+    }
+
+    self.rainfallLevel = data.first!.rainfallLevel!
+
+    let maxLat = data.max(by: { $0.latitude < $1.latitude })?.latitude ?? 0.0
+    let minLat = data.min(by: { $0.latitude < $1.latitude })?.latitude ?? 0.0
+    let maxLong = data.max(by: { $0.longitude < $1.longitude })?.longitude ?? 0.0
+    let minLong = data.min(by: { $0.longitude < $1.longitude })?.longitude ?? 0.0
+
+    self.coordinates = [
+      CLLocationCoordinate2D(latitude: minLat - 0.009, longitude: minLong - 0.01),
+      CLLocationCoordinate2D(latitude: minLat - 0.009, longitude: maxLong + 0.01),
+      CLLocationCoordinate2D(latitude: maxLat + 0.009, longitude: maxLong + 0.01),
+      CLLocationCoordinate2D(latitude: maxLat + 0.009, longitude: minLong - 0.01),
+    ]
+
+    self.id = UUID().uuidString
+
+  }
+}
+
 struct RainfallNowcastDataset {
 
   private(set) var sortedDatasetDict: [Date: [RainfallNowcastData]]
 
+  private(set) var sortedMergedGridDict: [Date: [RainfallNowcastMergedGrid]]
+
   let creationTimestamp: Date
 
   init?(data: Data) {
+    sortedMergedGridDict = [:]
 
     self.sortedDatasetDict = [:]
 
@@ -155,6 +191,46 @@ struct RainfallNowcastDataset {
 
         return a.latitude > b.latitude
       })
+
+      var mergedGridArray: [RainfallNowcastMergedGrid] = []
+
+      var tmp: [RainfallNowcastData] = []
+
+      for data in sortedDatasetDict[key]!
+      where data.latitude < CLLocation.HKNorthEastCoord.coordinate.latitude
+        && data.latitude > CLLocation.HKSouthWestCoord.coordinate.latitude
+        && data.longitude < CLLocation.HKNorthEastCoord.coordinate.longitude
+        && data.longitude > CLLocation.HKSouthWestCoord.coordinate.longitude
+      {
+
+        guard data.rainfallLevel != nil else {
+          if let gridData = RainfallNowcastMergedGrid(data: tmp) {
+            mergedGridArray.append(gridData)
+          }
+          tmp = []
+          continue
+        }
+
+        if tmp.isEmpty
+          || (tmp.last!.latitude == data.latitude && tmp.last!.rainfallLevel == data.rainfallLevel
+            && tmp.last!.nowcastTimestamp == data.nowcastTimestamp)
+        {
+          tmp.append(data)
+          continue
+        }
+
+        if let gridData = RainfallNowcastMergedGrid(data: tmp) {
+          mergedGridArray.append(gridData)
+        }
+        tmp = [data]
+
+      }
+
+      if let gridData = RainfallNowcastMergedGrid(data: tmp) {
+        mergedGridArray.append(gridData)
+      }
+
+      sortedMergedGridDict[key] = mergedGridArray
 
     }
 

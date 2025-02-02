@@ -98,10 +98,6 @@ enum RainfallNowcastSummary {
   }
 }
 
-//protocol RainfallNowcastMapViewModelDelegate: AnyObject {
-
-//}
-
 class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   let apiManager: APIManagerType
@@ -110,19 +106,16 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   let mapCenter = CLLocationCoordinate2D(latitude: 22.345, longitude: 114.12)  // Victoria Harbour
 
-  let HKSouthWestCoord = CLLocation(latitude: 22.15, longitude: 113.84)
-  let HKNorthEastCoord = CLLocation(latitude: 22.564, longitude: 114.405)
-
   var mapBound: MapCameraBounds {
     .init(
       centerCoordinateBounds: .init(
         MKMapRect(
           origin: .init(
             CLLocationCoordinate2D(
-              latitude: HKNorthEastCoord.coordinate.latitude,
-              longitude: HKSouthWestCoord.coordinate.longitude)),
-          size: .init(width: 320000, height: 320000))), minimumDistance: 10000,
-      maximumDistance: 150000)
+              latitude: CLLocation.HKNorthEastCoord.coordinate.latitude,
+              longitude: CLLocation.HKSouthWestCoord.coordinate.longitude)),
+          size: .init(width: 500000, height: 500000))), minimumDistance: 10000,
+      maximumDistance: 180000)
   }
 
   @Published
@@ -183,7 +176,6 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
     return "v" + (appVersion ?? "")
   }()
-  //  weak var delegate: RainfallNowcastMapViewModelDelegate?
 
   init(
     apiManager: APIManagerType = APIManager.shared,
@@ -240,8 +232,9 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
       guard let self, let rainfallNowcastDataset, let currentLocation else { return nil }
 
       return rainfallNowcastDataset.getRainfallRangeForLocation(
-        location: currentLocation.coordinate, southWestBoundary: HKSouthWestCoord.coordinate,
-        northEastBoundary: HKNorthEastCoord.coordinate)
+        location: currentLocation.coordinate,
+        southWestBoundary: CLLocation.HKSouthWestCoord.coordinate,
+        northEastBoundary: CLLocation.HKNorthEastCoord.coordinate)
     }.assign(to: &$currentLocationRainfallRange)
 
     apiManager.isReachable.sink { [weak self] reachable in
@@ -415,27 +408,6 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
       weatherWarningDataset = nil
       refresh()
     }
-  }
-
-  func isWithinHKBoundary(coord: CLLocationCoordinate2D) -> Bool {
-
-    if coord.latitude > HKNorthEastCoord.coordinate.latitude {
-      return false
-    }
-
-    if coord.latitude < HKSouthWestCoord.coordinate.latitude {
-      return false
-    }
-
-    if coord.longitude > HKNorthEastCoord.coordinate.longitude {
-      return false
-    }
-
-    if coord.longitude < HKSouthWestCoord.coordinate.longitude {
-      return false
-    }
-
-    return true
   }
 
   func getTimeOfTheDay(_ date: Date) -> String {
