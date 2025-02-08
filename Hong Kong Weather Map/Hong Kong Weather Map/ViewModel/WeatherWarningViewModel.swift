@@ -8,13 +8,14 @@
 import Combine
 import Foundation
 
+@MainActor
 class WeatherWarningViewModel: ObservableObject {
   var weatherWarningDataset: WeatherWarningDataset
 
   @Published
   var selection: String
 
-  var timer: Timer?
+  var timerTask: Task<Void, Never>?
 
   private var cancellables: Set<AnyCancellable> = Set()
 
@@ -24,40 +25,46 @@ class WeatherWarningViewModel: ObservableObject {
 
     initiateWarningRotateTimer()
 
-    $selection.sink { [weak self] _ in
-      self?.initiateWarningRotateTimer()
-    }.store(in: &cancellables)
   }
 
   func initiateWarningRotateTimer() {
 
     guard weatherWarningDataset.activeWarnings.count > 1 else { return }
 
-    timer?.invalidate()
+    timerTask?.cancel()
 
-    timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+    timerTask = Task { [weak self] in
 
-      guard let self else { return }
+      while !Task.isCancelled {
 
-      if self.selection == self.weatherWarningDataset.activeWarnings.last?.id {
-        self.selection = self.weatherWarningDataset.activeWarnings.first?.id ?? ""
-        return
-      }
+        guard let self else { return }
 
-      var found = false
-
-      for warning in weatherWarningDataset.activeWarnings {
-        if warning.id == selection {
-          found = true
+        if self.selection == self.weatherWarningDataset.activeWarnings.last?.id {
+          self.selection = self.weatherWarningDataset.activeWarnings.first?.id ?? ""
+          try? await Task.sleep(for: .seconds(5))
           continue
         }
 
-        if found {
-          self.selection = warning.id
-          break
+        var found = false
+
+        for warning in weatherWarningDataset.activeWarnings {
+          if warning.id == selection {
+            found = true
+            continue
+          }
+
+          if found {
+            self.selection = warning.id
+            break
+          }
         }
+
+        try? await Task.sleep(for: .seconds(5))
+
       }
+
     }
+
   }
 
 }

@@ -155,7 +155,7 @@ struct RainfallNowcastMapView: View {
     .ignoresSafeArea(edges: .bottom)
     .background(.white)
     .overlay {
-      if viewModel.isFetchingRainfallNowcast {
+      if viewModel.fetchRainfallNowcastTask != nil {
         ZStack {
           Rectangle().fill(.black.opacity(0.3))
           ProgressView {
@@ -237,7 +237,7 @@ struct RainfallNowcastMapView: View {
         ).foregroundStyle(.white)
           .background(.green)
           .clipShape(RoundedRectangle(cornerRadius: 5))
-          .disabled(viewModel.isFetchingRainfallNowcast)
+          .disabled(viewModel.fetchRainfallNowcastTask != nil)
           .shadow(radius: 3, x: 0, y: 3)
         Button(
           action: {
@@ -253,11 +253,11 @@ struct RainfallNowcastMapView: View {
           }
         ).foregroundStyle(.white)
           .background(
-            viewModel.autoplayTimer != nil
+            viewModel.autoplayTask != nil
               ? .gray : (viewModel.showRegionalTemperature ? .blue : .orange)
           )
           .clipShape(RoundedRectangle(cornerRadius: 5))
-          .disabled(viewModel.isFetchingRainfallNowcast || viewModel.autoplayTimer != nil)
+          .disabled(viewModel.isFetchingRainfallNowcast || viewModel.autoplayTask != nil)
           .shadow(radius: 3, x: 0, y: 3)
 
       }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
@@ -279,7 +279,7 @@ struct RainfallNowcastMapView: View {
           value: $viewModel.timestampSliderIndex,
           in: 0.0...CGFloat(viewModel.datasetTimestampList.count - 1), step: 1.0
         )
-        .disabled(viewModel.autoplayTimer != nil).padding(5)
+        .disabled(viewModel.autoplayTask != nil).padding(5)
 
         Button(
           action: {
@@ -290,7 +290,7 @@ struct RainfallNowcastMapView: View {
           label: {
             HStack {
 
-              if viewModel.autoplayTimer == nil {
+              if viewModel.autoplayTask == nil {
                 Image(systemName: "play.circle")
 
                 Text("Play")
@@ -306,7 +306,7 @@ struct RainfallNowcastMapView: View {
             }.padding(EdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10))
           }
         ).foregroundStyle(.white)
-          .background(viewModel.autoplayTimer == nil ? .green : .red)
+          .background(viewModel.autoplayTask == nil ? .green : .red)
           .clipShape(RoundedRectangle(cornerRadius: 5))
           .disabled(viewModel.isFetchingRainfallNowcast)
           .shadow(radius: 3, x: 0, y: 3)

@@ -12,6 +12,7 @@ enum Tab: String, Hashable {
   case summary
 }
 
+@MainActor
 class RootCoordinator: ObservableObject {
 
   @Published

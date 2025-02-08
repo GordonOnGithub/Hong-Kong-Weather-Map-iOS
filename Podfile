@@ -5,5 +5,5 @@ project 'Hong Kong Weather Map/Hong Kong Weather Map.xcodeproj'
 
 target 'Hong Kong Weather Map' do
   use_frameworks!
-  pod 'Alamofire', '~> 5.8'
+  pod 'Alamofire', '~> 5.10'
 end

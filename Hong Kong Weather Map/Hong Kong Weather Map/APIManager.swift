@@ -9,10 +9,11 @@ import Alamofire
 import Combine
 import Foundation
 
-protocol APIManagerType {
+protocol APIManagerType: AnyObject, Sendable {
   static var shared: APIManagerType { get }
   var isReachable: CurrentValueSubject<Bool, Never> { get }
-  func call(api: API) -> AnyPublisher<Data?, Error>
+
+  func call(api: API) async throws -> Data?
 }
 
 enum API {
@@ -69,12 +70,12 @@ enum API {
 
 }
 
-class APIManagerMock: APIManagerType {
-  static var shared: APIManagerType = APIManagerMock()
+class APIManagerMock: APIManagerType, @unchecked Sendable {
+  static let shared: APIManagerType = APIManagerMock()
 
   var isReachable: CurrentValueSubject<Bool, Never> = .init(true)
 
-  func call(api: API) -> AnyPublisher<Data?, Error> {
+  func call(api: API) async throws -> Data? {
 
     let fileName =
       switch api {
@@ -98,21 +99,21 @@ class APIManagerMock: APIManagerType {
     if let fileURL = Bundle.main.url(forResource: fileName, withExtension: fileExtension),
       let data = try? Data(contentsOf: fileURL)
     {
-      return Just(data).setFailureType(to: Error.self).eraseToAnyPublisher()
+      return data
 
     }
 
-    return Just(nil).setFailureType(to: Error.self).eraseToAnyPublisher()
+    return nil
 
   }
 
 }
 
-class APIManager: APIManagerType {
+class APIManager: APIManagerType, @unchecked Sendable {
 
-  static var shared: APIManagerType = APIManager()
+  static let shared: APIManagerType = APIManager()
 
-  var isReachable: CurrentValueSubject<Bool, Never> = CurrentValueSubject(true)
+  private(set) var isReachable: CurrentValueSubject<Bool, Never> = CurrentValueSubject(true)
 
   private init() {
     NetworkReachabilityManager.default?.startListening(
@@ -129,28 +130,23 @@ class APIManager: APIManagerType {
       })
   }
 
-  func call(api: API) -> AnyPublisher<Data?, Error> {
+  func call(api: API) async throws -> Data? {
 
-    return Future { promise in
+    let request = AF.request(
+      api.url, method: HTTPMethod(rawValue: self.getMethod(forAPI: api)),
+      parameters: api.parameter, headers: HTTPHeaders(api.header))
 
-      Task {
-        let request = AF.request(
-          api.url, method: HTTPMethod(rawValue: self.getMethod(forAPI: api)),
-          parameters: api.parameter, headers: HTTPHeaders(api.header))
+    let response = await request.serializingData().response
 
-        request.response { response in
+    if let error = response.error {
+      throw error
+    }
 
-          if let error = response.error {
-            promise(.failure(error))
-          } else {
-            promise(.success(response.data))
-          }
+    if let data = response.data, response.error == nil {
+      return data
+    }
 
-        }
-
-      }
-
-    }.eraseToAnyPublisher()
+    return nil
 
   }
 

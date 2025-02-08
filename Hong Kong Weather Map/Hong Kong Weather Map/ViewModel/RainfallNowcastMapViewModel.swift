@@ -98,6 +98,7 @@ enum RainfallNowcastSummary {
   }
 }
 
+@MainActor
 class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   let apiManager: APIManagerType
@@ -114,7 +115,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
             CLLocationCoordinate2D(
               latitude: CLLocation.HKNorthEastCoord.coordinate.latitude,
               longitude: CLLocation.HKSouthWestCoord.coordinate.longitude)),
-          size: .init(width: 500000, height: 500000))), minimumDistance: 10000,
+          size: .init(width: 700000, height: 700000))), minimumDistance: 10000,
       maximumDistance: 180000)
   }
 
@@ -143,7 +144,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   var timestampSliderIndex: CGFloat = 0
 
   @Published
-  var autoplayTimer: Timer? = nil
+  var autoplayTask: Task<Void, Never>? = nil
 
   @Published
   var isInBackground: Bool = false
@@ -153,6 +154,8 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   @Published
   var isFetchingRainfallNowcast: Bool = false
+
+  var fetchRainfallNowcastTask: Task<Void, Never>? = nil
 
   @Published
   var currentLocation: CLLocation? = nil
@@ -204,7 +207,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
       guard let self else { return .none }
 
-      if !isFetchingRainfallNowcast,
+      if fetchRainfallNowcastTask == nil,
         rainfallNowcastDataset == nil
       {
         return .none
@@ -259,96 +262,87 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   }
 
   func fetchRainfallNowcastData() {
-    isFetchingRainfallNowcast = true
 
-    autoplayTimer?.invalidate()
-    autoplayTimer = nil
+    if let fetchRainfallNowcastTask {
+      fetchRainfallNowcastTask.cancel()
+    }
 
-    apiManager.call(api: .rainfallNowcast).receive(on: DispatchQueue.main).sink {
-      [weak self] result in
+    fetchRainfallNowcastTask = Task {
+      do {
 
-      self?.isFetchingRainfallNowcast = false
+        defer {
+          fetchRainfallNowcastTask = nil
+        }
 
-      switch result {
-      case .failure(_):
-        self?.rainfallNowcastDataset = nil
-        self?.errorMessage = .dataError
-      default:
-        break
+        guard let data = try await apiManager.call(api: .rainfallNowcast),
+          let dataset = RainfallNowcastDataset(data: data), !Task.isCancelled
+        else {
 
+          rainfallNowcastDataset = nil
+
+          return
+        }
+
+        rainfallNowcastDataset = dataset
+
+        datasetTimestampList = dataset.sortedDatasetDict.keys.map({ date in
+          date
+        }).sorted(by: { a, b in
+          a.timeIntervalSince1970 < b.timeIntervalSince1970
+        })
+
+        selectedTimestamp = datasetTimestampList.first
+        errorMessage = .none
+      } catch {
+        rainfallNowcastDataset = nil
+        errorMessage = .dataError
       }
-
-    } receiveValue: { [weak self] data in
-      guard let self, let data, let dataset = RainfallNowcastDataset(data: data) else {
-
-        self?.rainfallNowcastDataset = nil
-
-        return
-      }
-
-      self.rainfallNowcastDataset = dataset
-
-      self.datasetTimestampList = dataset.sortedDatasetDict.keys.map({ date in
-        date
-      }).sorted(by: { a, b in
-        a.timeIntervalSince1970 < b.timeIntervalSince1970
-      })
-
-      self.selectedTimestamp = datasetTimestampList.first
-
-    }.store(in: &cancellables)
+    }
 
   }
 
   func fetchWeatherWarningDataset() {
-    apiManager.call(api: .weatherWarning).receive(on: DispatchQueue.main).sink {
-      [weak self] result in
 
-      switch result {
+    Task {
+      do {
 
-      case .failure:
-        self?.errorMessage = .dataError
-        self?.weatherWarningDataset = nil
-      default:
-        break
+        guard let data = try await apiManager.call(api: .weatherWarning) else {
+          weatherWarningDataset = nil
+          return
+        }
+
+        self.weatherWarningDataset = WeatherWarningDataset(data: data)
+        errorMessage = .none
+
+      } catch {
+        errorMessage = .dataError
+        weatherWarningDataset = nil
       }
 
-    } receiveValue: { [weak self] data in
+    }
 
-      guard let self, let data else {
-        self?.weatherWarningDataset = nil
-        return
-      }
-
-      self.weatherWarningDataset = WeatherWarningDataset(data: data)
-
-    }.store(in: &cancellables)
   }
 
   func fetchRegionalTemperatureDataset() {
 
-    apiManager.call(api: .regionalTemperature).receive(on: DispatchQueue.main).sink {
-      [weak self] result in
+    Task {
 
-      switch result {
+      do {
+        guard let data = try await apiManager.call(api: .regionalTemperature) else {
+          regionalTemperatureDataset = nil
+          return
+        }
 
-      case .failure:
-        self?.errorMessage = .dataError
-        self?.regionalTemperatureDataset = nil
-      default:
-        break
+        regionalTemperatureDataset = RegionalTemperatureDataset(data: data)
+        errorMessage = .none
+
+      } catch {
+
+        errorMessage = .dataError
+        regionalTemperatureDataset = nil
       }
 
-    } receiveValue: { [weak self] data in
-
-      guard let self, let data else {
-        self?.regionalTemperatureDataset = nil
-        return
-      }
-
-      self.regionalTemperatureDataset = RegionalTemperatureDataset(data: data)
-
-    }.store(in: &cancellables)
+    }
 
   }
 
@@ -424,38 +418,48 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   func onPlayButtonClicked() {
 
-    if let autoplayTimer {
-      autoplayTimer.invalidate()
-      self.autoplayTimer = nil
+    if let autoplayTask, !autoplayTask.isCancelled {
+
+      autoplayTask.cancel()
+      self.autoplayTask = nil
+
     } else if datasetTimestampList.count > 0 {
 
-      selectedTimestamp = datasetTimestampList[0]
+      autoplayTask = Task {
+        selectedTimestamp = datasetTimestampList[0]
 
-      timestampSliderIndex = 0.0
+        timestampSliderIndex = 0.0
 
-      self.autoplayTimer = Timer.scheduledTimer(
-        withTimeInterval: 1.4, repeats: true,
-        block: { [weak self] _ in
+        try? await Task.sleep(for: .seconds(1.5))
 
-          guard let self, let selectedTimestamp else { return }
+        while !Task.isCancelled {
+          guard let selectedTimestamp else {
+            autoplayTask?.cancel()
+            autoplayTask = nil
+            return
+          }
 
-          for i in (0..<self.datasetTimestampList.count) {
+          for i in (0..<datasetTimestampList.count) {
 
-            if selectedTimestamp == self.datasetTimestampList[i] {
+            if selectedTimestamp == datasetTimestampList[i] {
 
-              if i >= self.datasetTimestampList.count - 1 {
+              if i >= datasetTimestampList.count - 1 {
 
-                self.autoplayTimer?.invalidate()
-                self.autoplayTimer = nil
+                autoplayTask?.cancel()
+                autoplayTask = nil
+                return
 
               } else {
-                self.selectedTimestamp = self.datasetTimestampList[i + 1]
-                self.timestampSliderIndex = CGFloat(i + 1)
+                self.selectedTimestamp = datasetTimestampList[i + 1]
+                timestampSliderIndex = CGFloat(i + 1)
               }
             }
           }
-        })
 
+          try? await Task.sleep(for: .seconds(1.5))
+
+        }
+      }
     }
 
   }
@@ -504,7 +508,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
 }
 
-extension RainfallNowcastMapViewModel: CLLocationManagerDelegate {
+extension RainfallNowcastMapViewModel: @preconcurrency CLLocationManagerDelegate {
   func locationManager(
     _ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus
   ) {

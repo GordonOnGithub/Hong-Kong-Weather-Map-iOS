@@ -455,7 +455,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Hong Kong Weather Map/Hong_Kong_Weather_Map.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Hong Kong Weather Map/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Q4R7U9T9F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -491,7 +491,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -505,7 +505,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Hong Kong Weather Map/Hong_Kong_Weather_Map.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Hong Kong Weather Map/Preview Content\"";
 				DEVELOPMENT_TEAM = 9Q4R7U9T9F;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -541,7 +541,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
