@@ -105,6 +105,10 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   var locationManager: CLLocationManagerType
 
+  let storeReviewControllerInjectable: SKStoreReviewControllerInjectableType
+
+  let userDefaults: UserDefaultsType
+
   let mapCenter = CLLocationCoordinate2D(latitude: 22.345, longitude: 114.12)  // Victoria Harbour
 
   var mapBound: MapCameraBounds {
@@ -169,9 +173,14 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
   @Published
   var currentLocationRainfallRangeMessage: RainfallNowcastSummary = .none
 
+  @Published
+  var showLegend: Bool = false
+
   var cancellables: Set<AnyCancellable> = Set()
 
   var lastRefreshTimestamp: Date?
+
+  let launchCount: Int
 
   lazy var versionString: String = {
 
@@ -182,11 +191,17 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
   init(
     apiManager: APIManagerType = APIManager.shared,
-    locationManager: CLLocationManagerType = CLLocationManager()
+    locationManager: CLLocationManagerType = CLLocationManager(),
+    storeReviewControllerInjectable: SKStoreReviewControllerInjectableType =
+      SKStoreReviewControllerInjectable(),
+    userDefaults: UserDefaultsType = UserDefaults.standard
   ) {
 
     self.apiManager = apiManager
     self.locationManager = locationManager
+    self.storeReviewControllerInjectable = storeReviewControllerInjectable
+    self.userDefaults = userDefaults
+    launchCount = 1 + (userDefaults.object(forKey: "AppLaunchCount") as? Int ?? 0)
 
     super.init()
 
@@ -195,6 +210,18 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
     self.locationManager.delegate = self
 
     self.locationManager.requestWhenInUseAuthorization()
+
+    userDefaults.setValue(launchCount, forKey: "AppLaunchCount")
+  }
+
+  func askForReviewIfApplicable() {
+
+    if launchCount >= 3, userDefaults.object(forKey: "didAskForReview") == nil {
+
+      userDefaults.setValue(true, forKey: "didAskForReview")
+      storeReviewControllerInjectable.requestReview()
+
+    }
 
   }
 
@@ -271,6 +298,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
       do {
 
         defer {
+          timestampSliderIndex = 0
           fetchRainfallNowcastTask = nil
         }
 
@@ -293,6 +321,7 @@ class RainfallNowcastMapViewModel: NSObject, ObservableObject {
 
         selectedTimestamp = datasetTimestampList.first
         errorMessage = .none
+        askForReviewIfApplicable()
       } catch {
         rainfallNowcastDataset = nil
         errorMessage = .dataError

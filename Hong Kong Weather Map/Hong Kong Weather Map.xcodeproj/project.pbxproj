@@ -23,6 +23,9 @@
 		7D9097B62BD3E8B000C8D45E /* WeatherWarningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097B52BD3E8B000C8D45E /* WeatherWarningViewModel.swift */; };
 		7D9097B82BD4B8B000C8D45E /* mock_temperature_data.csv in Resources */ = {isa = PBXBuildFile; fileRef = 7D9097B72BD4B8B000C8D45E /* mock_temperature_data.csv */; };
 		7D9097BA2BD4B92800C8D45E /* RegionalTemperatureDataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9097B92BD4B92800C8D45E /* RegionalTemperatureDataset.swift */; };
+		7D95A11B2D7B232F00AE8570 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95A11A2D7B232F00AE8570 /* UserDefaults+Extension.swift */; };
+		7D95A11D2D7B233700AE8570 /* SKStoreReviewControllerInjectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95A11C2D7B233700AE8570 /* SKStoreReviewControllerInjectable.swift */; };
+		7D95A11F2D7B238100AE8570 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D95A11E2D7B238100AE8570 /* UIApplication+Extension.swift */; };
 		7DDB9ACB2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */; };
 		7DDB9ACF2BB060BC00B87E36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */; };
 		7DDB9AD32BB060BC00B87E36 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7DDB9AD22BB060BC00B87E36 /* Preview Assets.xcassets */; };
@@ -53,6 +56,9 @@
 		7D9097B92BD4B92800C8D45E /* RegionalTemperatureDataset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionalTemperatureDataset.swift; sourceTree = "<group>"; };
 		7D9097BB2BDCAB0900C8D45E /* Hong-Kong-Weather-Map-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Hong-Kong-Weather-Map-Info.plist"; sourceTree = SOURCE_ROOT; };
 		7D9097BC2BDCB47900C8D45E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		7D95A11A2D7B232F00AE8570 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		7D95A11C2D7B233700AE8570 /* SKStoreReviewControllerInjectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKStoreReviewControllerInjectable.swift; sourceTree = "<group>"; };
+		7D95A11E2D7B238100AE8570 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		7DDB9AC72BB060BB00B87E36 /* Hong Kong Weather Map Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hong Kong Weather Map Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DDB9ACA2BB060BB00B87E36 /* Hong_Kong_Weather_MapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hong_Kong_Weather_MapApp.swift; sourceTree = "<group>"; };
 		7DDB9ACE2BB060BC00B87E36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -89,6 +95,8 @@
 		7D9097932BB455C800C8D45E /* Extension */ = {
 			isa = PBXGroup;
 			children = (
+				7D95A11E2D7B238100AE8570 /* UIApplication+Extension.swift */,
+				7D95A11A2D7B232F00AE8570 /* UserDefaults+Extension.swift */,
 				7D7748FE2D4F1C0B009EB0FE /* CLLocation+Extension.swift */,
 				7D90979E2BB6854400C8D45E /* CLLocationManager + Extension.swift */,
 				7D9097942BB455DB00C8D45E /* String+Extension.swift */,
@@ -132,6 +140,7 @@
 		7DDB9AC92BB060BB00B87E36 /* Hong Kong Weather Map */ = {
 			isa = PBXGroup;
 			children = (
+				7D95A11C2D7B233700AE8570 /* SKStoreReviewControllerInjectable.swift */,
 				7D9097BB2BDCAB0900C8D45E /* Hong-Kong-Weather-Map-Info.plist */,
 				7D9097A02BBABA7A00C8D45E /* Coordinator */,
 				7D9097932BB455C800C8D45E /* Extension */,
@@ -310,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7D9097BA2BD4B92800C8D45E /* RegionalTemperatureDataset.swift in Sources */,
+				7D95A11D2D7B233700AE8570 /* SKStoreReviewControllerInjectable.swift in Sources */,
 				7DDB9ADA2BB0629100B87E36 /* APIManager.swift in Sources */,
 				7D9097992BB45A4900C8D45E /* RainfallNowcastMapView.swift in Sources */,
 				7D9097B62BD3E8B000C8D45E /* WeatherWarningViewModel.swift in Sources */,
@@ -325,6 +335,8 @@
 				7D9097A22BBABA9700C8D45E /* RootCoordinator.swift in Sources */,
 				7D90979D2BB6801100C8D45E /* Date+Extension.swift in Sources */,
 				7D9097B42BD3E87E00C8D45E /* WeatherWarningView.swift in Sources */,
+				7D95A11B2D7B232F00AE8570 /* UserDefaults+Extension.swift in Sources */,
+				7D95A11F2D7B238100AE8570 /* UIApplication+Extension.swift in Sources */,
 				7D9097AA2BC189CA00C8D45E /* WeatherWarningDataset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

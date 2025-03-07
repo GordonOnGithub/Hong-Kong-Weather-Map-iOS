@@ -45,114 +45,109 @@ struct RainfallNowcastMapView: View {
         .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
 
       }
-      GeometryReader { reader in
 
-        ScrollView {
-          VStack(spacing: 0) {
-
-            if !viewModel.isFetchingRainfallNowcast {
-              summaryRow
-            }
-
-            Map(
-              position: .constant(
-                .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 180000))),
-              bounds: viewModel.mapBound, interactionModes: [.pan, .zoom],
-              selection: $viewModel.selectedWeatherStation
-
-            ) {
-
-              if viewModel.showRegionalTemperature {
-                if let regionalTemperatureDataset = viewModel.regionalTemperatureDataset {
-
-                  ForEach(regionalTemperatureDataset.dataDict.sorted(by: >), id: \.key) {
-                    location, temperature in
-
-                    if let coord = RegionalTemperatureDataset.getWeatherStationPosition(
-                      locationName: location)
-                    {
-
-                      Marker(coordinate: coord) {
-                        Text("\(location)\n\(temperature)°C")
-                      }.tag(location as String?)
-
-                    }
-                  }
-                }
-              } else {
-
-                if let selectedTimestamp = viewModel.selectedTimestamp,
-                  let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
-                  let mergedGridOfSelectedTimestamp = rainfallNowcastDataset.sortedMergedGridDict[
-                    selectedTimestamp]
-                {
-                  ForEach(mergedGridOfSelectedTimestamp) { data in
-                    MapPolygon(coordinates: data.coordinates)
-                      .foregroundStyle(data.rainfallLevel.color.opacity(0.5))
-                  }
-                }
-
-                MapPolygon(coordinates: [
-                  CLLocation.HKNorthEastCoord.coordinate,
-
-                  CLLocationCoordinate2D(
-                    latitude: CLLocation.HKSouthWestCoord.coordinate.latitude,
-                    longitude: CLLocation.HKNorthEastCoord.coordinate.longitude),
-
-                  CLLocation.HKSouthWestCoord.coordinate,
-
-                  CLLocationCoordinate2D(
-                    latitude: CLLocation.HKNorthEastCoord.coordinate.latitude,
-                    longitude: CLLocation.HKSouthWestCoord.coordinate.longitude),
-
-                ]).stroke(.black, lineWidth: 1)
-                  .foregroundStyle(.clear)
-
-              }
-
-              UserAnnotation()
-
-            }.mapControls {
-              if viewModel.hasLocationPermission {
-                MapUserLocationButton()
-              }
-            }
-            .mapStyle(
-              .standard(elevation: .flat, pointsOfInterest: .excludingAll, showsTraffic: true)
-            )
-            .frame(height: reader.size.width)
-          }
-
-          if !viewModel.isFetchingRainfallNowcast {
-
-            if !viewModel.showRegionalTemperature {
-              rainfallNowCastButtonsPanelView
-                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
-            }
-
-            HStack {
-
-              if viewModel.rainfallNowcastDataset != nil {
-
-                Text(
-                  "Last update: \(viewModel.rainfallNowcastDataset?.creationTimestamp.ISO8601Format(.iso8601(timeZone: TimeZone.current)) ?? "")"
-                )
-                .font(.system(size: 12))
-              }
-            }
-
-            mapLegend
-              .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
-
-            Text(viewModel.versionString).font(.system(size: 10))
-          }
-
-          Spacer()
-        }.scrollIndicators(.visible)
+      if !viewModel.isFetchingRainfallNowcast {
+        summaryRow
       }
-      Spacer()
+
+      Map(
+        position: .constant(
+          .camera(.init(centerCoordinate: viewModel.mapCenter, distance: 180000))),
+        bounds: viewModel.mapBound, interactionModes: [.pan, .zoom],
+        selection: $viewModel.selectedWeatherStation
+
+      ) {
+
+        if viewModel.showRegionalTemperature {
+          if let regionalTemperatureDataset = viewModel.regionalTemperatureDataset {
+
+            ForEach(regionalTemperatureDataset.dataDict.sorted(by: >), id: \.key) {
+              location, temperature in
+
+              if let coord = RegionalTemperatureDataset.getWeatherStationPosition(
+                locationName: location)
+              {
+
+                Marker(coordinate: coord) {
+                  Text("\(location)\n\(temperature)°C")
+                }.tag(location as String?)
+
+              }
+            }
+          }
+        } else {
+
+          if let selectedTimestamp = viewModel.selectedTimestamp,
+            let rainfallNowcastDataset = viewModel.rainfallNowcastDataset,
+            let mergedGridOfSelectedTimestamp = rainfallNowcastDataset.sortedMergedGridDict[
+              selectedTimestamp]
+          {
+            ForEach(mergedGridOfSelectedTimestamp) { data in
+              MapPolygon(coordinates: data.coordinates)
+                .foregroundStyle(data.rainfallLevel.color.opacity(0.5))
+            }
+          }
+
+          MapPolygon(coordinates: [
+            CLLocation.HKNorthEastCoord.coordinate,
+
+            CLLocationCoordinate2D(
+              latitude: CLLocation.HKSouthWestCoord.coordinate.latitude,
+              longitude: CLLocation.HKNorthEastCoord.coordinate.longitude),
+
+            CLLocation.HKSouthWestCoord.coordinate,
+
+            CLLocationCoordinate2D(
+              latitude: CLLocation.HKNorthEastCoord.coordinate.latitude,
+              longitude: CLLocation.HKSouthWestCoord.coordinate.longitude),
+
+          ]).stroke(.black, lineWidth: 1)
+            .foregroundStyle(.clear)
+
+        }
+
+        UserAnnotation()
+
+      }.mapControls {
+        if viewModel.hasLocationPermission {
+          MapUserLocationButton()
+        }
+      }
+      .mapStyle(
+        .standard(elevation: .flat, pointsOfInterest: .excludingAll, showsTraffic: true)
+      )
+      .frame(height: 300)
+
+      if !viewModel.isFetchingRainfallNowcast {
+
+        if !viewModel.showRegionalTemperature {
+          rainfallNowCastButtonsPanelView
+            .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+        }
+
+        Button {
+          viewModel.showLegend = true
+        } label: {
+          Label("Show Legend", systemImage: "info.circle")
+        }.padding(10)
+
+        Spacer()
+
+        HStack {
+
+          if viewModel.rainfallNowcastDataset != nil {
+
+            Text(
+              "Last update: \(viewModel.rainfallNowcastDataset?.creationTimestamp.ISO8601Format(.iso8601(timeZone: TimeZone.current)) ?? "")"
+            )
+            .font(.system(size: 12))
+          }
+        }
+
+        Text(viewModel.versionString).font(.system(size: 10))
+      }
+
     }
-    .ignoresSafeArea(edges: .bottom)
     .background(.white)
     .overlay {
       if viewModel.fetchRainfallNowcastTask != nil {
@@ -161,13 +156,24 @@ struct RainfallNowcastMapView: View {
           ProgressView {
             Text("Loading...")
           }
-        }
+        }.ignoresSafeArea(.all)
+      } else if viewModel.showLegend {
+        ZStack {
+          Rectangle().fill(.black.opacity(0.3))
+          mapLegend
+            .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)).clipShape(
+              RoundedRectangle(cornerRadius: 5)
+            )
+            .onTapGesture {
+              viewModel.showLegend = false
+            }
+        }.ignoresSafeArea(.all)
+
       }
     }
     .onAppear {
       UIPageControl.appearance().currentPageIndicatorTintColor = .black
       UIPageControl.appearance().pageIndicatorTintColor = .gray
-
     }
     .onReceive(
       NotificationCenter.default.publisher(
@@ -323,6 +329,8 @@ struct RainfallNowcastMapView: View {
           Text("Map Legend:").font(.headline)
           Spacer()
 
+          Image(systemName: "xmark").foregroundStyle(.black)
+
         }
 
         HStack(spacing: 5) {
@@ -380,12 +388,11 @@ struct RainfallNowcastMapView: View {
           Spacer()
 
         }
-      }.padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+      }.padding(20)
     }
     .background(content: {
       RoundedRectangle(cornerRadius: 5)
         .fill(.lightYellow)
-        .stroke(.primary, lineWidth: 1)
     })
   }
 
