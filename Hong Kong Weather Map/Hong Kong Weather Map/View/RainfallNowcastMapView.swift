@@ -18,7 +18,7 @@ struct RainfallNowcastMapView: View {
 
   var body: some View {
 
-    VStack {
+    VStack(spacing: 0) {
 
       if viewModel.errorMessage != .none {
 
@@ -42,7 +42,7 @@ struct RainfallNowcastMapView: View {
         WeatherWarningView(
           viewModel: WeatherWarningViewModel(weatherWarningDataset: weatherWarningDataset)
         )
-        .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+        .padding(EdgeInsets(top: 5, leading: 10, bottom: 10, trailing: 10))
 
       }
 
@@ -122,7 +122,7 @@ struct RainfallNowcastMapView: View {
 
         if !viewModel.showRegionalTemperature {
           rainfallNowCastButtonsPanelView
-            .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+            .padding(10)
         }
 
         Button {
